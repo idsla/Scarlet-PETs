@@ -1,17 +1,15 @@
 import pandas as pd
 
 
-def load_swift_data(DATA_DIR):
+def load_swift_data(train_data_path, test_data_path):
     """
     Load swift train and test data to dataframe
     :param DATA_DIR: folder path containing data
     :return: swift train dataframe, swift test dataframe
     """
-    train = pd.read_csv(
-        DATA_DIR / "swift_transaction_train_dataset.csv", index_col="MessageId"
-    )
+    train = pd.read_csv(train_data_path, index_col="MessageId")
     train["Timestamp"] = train["Timestamp"].astype("datetime64[ns]")
-    test = pd.read_csv(DATA_DIR / "swift_transaction_test_dataset.csv", index_col="MessageId")
+    test = pd.read_csv(test_data_path, index_col="MessageId")
     test["Timestamp"] = test["Timestamp"].astype("datetime64[ns]")
 
     return train, test
