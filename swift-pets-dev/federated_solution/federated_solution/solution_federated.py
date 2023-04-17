@@ -11,8 +11,8 @@ import pickle
 import random
 from Crypto.Random import get_random_bytes
 
-from .TrainSwiftClient import TrainSwiftClient
-from .TestSwiftClient import TestSwiftClient
+from .TrainPNSClient import TrainPNSClient
+from .TestPNSClient import TestPNSClient
 from .BankClient import BankClient
 from .TrainStrategy import TrainStrategy
 from .TestStrategy import TestStrategy
@@ -33,7 +33,7 @@ def train_client_factory(
     Args:
         cid (str): Identifier for a client node/federation unit. Will be
             constant over the simulation and between train and test stages. The
-            SWIFT node will always be named 'swift'.
+            pns node will always be named 'pns'.
         data_path (Path): Path to CSV data file specific to this client.
         client_dir (Path): Path to a directory specific to this client that is
             available over the simulation. Clients can use this directory for
@@ -47,11 +47,11 @@ def train_client_factory(
     prime = 20358416231591
     public_key_size = 2048
 
-    if cid == "swift":
-        #logger.info("Initializing SWIFT client for {}", cid)
-        swift_df = pd.read_csv(data_path, index_col="MessageId")
-        return TrainSwiftClient(
-            cid, client_dir=client_dir, data=swift_df, session_key_length=session_key_length,
+    if cid == "pns":
+        #logger.info("Initializing pns client for {}", cid)
+        pns_df = pd.read_csv(data_path, index_col="MessageId")
+        return TrainPNSClient(
+            cid, client_dir=client_dir, data=pns_df, session_key_length=session_key_length,
             public_key_size=public_key_size
         )
     else:
@@ -110,18 +110,18 @@ def test_client_factory(
     Args:
         cid (str): Identifier for a client node/federation unit. Will be
             constant over the simulation and between train and test stages. The
-            SWIFT node will always be named 'swift'.
+            pns node will always be named 'pns'.
         data_path (Path): Path to CSV test data file specific to this client.
         client_dir (Path): Path to a directory specific to this client that is
             available over the simulation. Clients can use this directory for
             saving and reloading client state.
         preds_format_path (Optional[Path]): Path to CSV file matching the format
             you must write your predictions with, filled with dummy values. This
-            will only be non-None for the 'swift' client—bank clients should not
+            will only be non-None for the 'pns' client—bank clients should not
             write any predictions and receive None for this argument.
         preds_dest_path (Optional[Path]): Destination path that you must write
             your test predictions to as a CSV file. This will only be non-None
-            for the 'swift' client—bank clients should not write any predictions
+            for the 'pns' client—bank clients should not write any predictions
             and will receive None for this argument.
 
     Returns:
@@ -131,11 +131,11 @@ def test_client_factory(
     session_key_length = 32
     prime = 20358416231591
     public_key_size = 2048
-    if cid == "swift":
-        #logger.info("Initializing SWIFT client for {}", cid)
-        swift_df = pd.read_csv(data_path, index_col="MessageId")
-        return TestSwiftClient(
-            cid, client_dir=client_dir, data=swift_df, preds_dest_path=preds_dest_path,
+    if cid == "pns":
+        #logger.info("Initializing pns client for {}", cid)
+        pns_df = pd.read_csv(data_path, index_col="MessageId")
+        return TestPNSClient(
+            cid, client_dir=client_dir, data=pns_df, preds_dest_path=preds_dest_path,
             preds_format_path=preds_format_path, evaluation=False, error_rate=error_rate,
             session_key_length=session_key_length, public_key_size=public_key_size
         )

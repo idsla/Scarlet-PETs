@@ -36,7 +36,7 @@ class TrainStrategy(fl.server.strategy.Strategy):
         secure_sum (ndarray): Save encrypted secure sum computation result.
         final_sum_all (list): Collection of encrtped sum using different session keys.
         banks_partition (dict): Store banks of each client partition.
-        hashed_accounts (list): Hashed accounts from swift.
+        hashed_accounts (list): Hashed accounts from pns.
         server_dir (Path): Path to the server directory.
         stats (dict): Dictionary to store statistics.
 
@@ -63,7 +63,7 @@ class TrainStrategy(fl.server.strategy.Strategy):
         self.secure_sum = None  # save encrypted secure sum computation result
         self.final_sum_all = None  # collection of encrtped sum using different session keys
         self.banks_partition = None  # store banks of each client partition
-        self.hashed_accounts = None  # hashed accounts from swift
+        self.hashed_accounts = None  # hashed accounts from pns
         self.server_dir = server_dir
 
         file_path = Path.joinpath(server_dir, "stats.json")
@@ -86,7 +86,7 @@ class TrainStrategy(fl.server.strategy.Strategy):
         # empty parameters
         server_parameters = [np.array([])]
         clients = client_manager.all()
-        self.bank_ids = [cid for cid in clients.keys() if cid != 'swift']
+        self.bank_ids = [cid for cid in clients.keys() if cid != 'pns']
         return ndarrays_to_parameters(server_parameters)
 
     def configure_fit(self, server_round, parameters, client_manager):
@@ -108,7 +108,7 @@ class TrainStrategy(fl.server.strategy.Strategy):
         start = time.time()
         # get all clients
         clients = client_manager.all()
-        bank_cids = [cid for cid in clients.keys() if cid != 'swift']
+        bank_cids = [cid for cid in clients.keys() if cid != 'pns']
         num_banks = len(bank_cids)
 
         # first round -> tell clients to send public key
@@ -129,10 +129,10 @@ class TrainStrategy(fl.server.strategy.Strategy):
         # second round -> tells banks to share their banks partition
         elif server_round == 2:
             print(self.public_keys_dict)
-            config = {'task': 'share_bank_in_partition', 'key': self.public_keys_dict['swift']}
+            config = {'task': 'share_bank_in_partition', 'key': self.public_keys_dict['pns']}
             ret = []
             for cid in clients.keys():
-                if cid != 'swift':
+                if cid != 'pns':
                     ret.append((clients[cid], FitIns(parameters, config)))
 
             end = time.time()
@@ -144,13 +144,13 @@ class TrainStrategy(fl.server.strategy.Strategy):
             tracemalloc.stop()
 
             return ret
-        # third round -> send swift banks partition
+        # third round -> send pns banks partition
         elif server_round == 3:
-            config = {'task': 'send_swift_banks_in_partitions'}
+            config = {'task': 'send_pns_banks_in_partitions'}
             for cid in bank_cids:
                 config[cid] = self.public_keys_dict[cid]
             ret = [
-                (clients['swift'], FitIns(ndarrays_to_parameters(self.banks_partition), config))
+                (clients['pns'], FitIns(ndarrays_to_parameters(self.banks_partition), config))
             ]
 
             end = time.time()
@@ -209,7 +209,7 @@ class TrainStrategy(fl.server.strategy.Strategy):
             ret = []
             size = 0
             for cid in clients.keys():
-                config = {'task': 'build-local-bloomfilter', 'key': self.public_keys_dict['swift']}
+                config = {'task': 'build-local-bloomfilter', 'key': self.public_keys_dict['pns']}
                 data_sent = assembling_final_sum_with_hashed_accounts(self.final_sum_all, self.hashed_accounts)
                 parameters = ndarrays_to_parameters(data_sent)
                 size += compute_data_capacity(data_sent)
@@ -227,15 +227,15 @@ class TrainStrategy(fl.server.strategy.Strategy):
 
             return ret
 
-        # send encrypted bloom filter to swift
+        # send encrypted bloom filter to pns
         elif server_round == 4 + num_banks + 2:
             ret = []
-            config = {'task': 'swift_run_train'}
+            config = {'task': 'pns_run_train'}
             data_sent = []
             for cid, bf_enc in self.bloom_filters.items():
                 data_sent.extend(bf_enc)
             parameters = ndarrays_to_parameters(data_sent)
-            ret.append((clients['swift'], FitIns(parameters, config)))
+            ret.append((clients['pns'], FitIns(parameters, config)))
 
             end = time.time()
             self.stats['configure_fit']['time'][str(server_round)] = end - start
@@ -305,7 +305,7 @@ class TrainStrategy(fl.server.strategy.Strategy):
             return empty_parameters(), {}
         elif server_round == 3:
             for client, FitRes in results:
-                if client.cid == 'swift':
+                if client.cid == 'pns':
                     data_received = parameters_to_ndarrays(FitRes.parameters)
                     self.hashed_accounts = data_received
 
@@ -364,7 +364,7 @@ class TrainStrategy(fl.server.strategy.Strategy):
         elif server_round == 4 + num_banks + 1:
             size = 0
             for client, FitRes in results:
-                if client.cid != 'swift':
+                if client.cid != 'pns':
                     data_enc = parameters_to_ndarrays(FitRes.parameters)
                     self.bloom_filters[client.cid] = data_enc  # bloom filter + encrypted hash accounts
                     size += compute_data_capacity(data_enc)

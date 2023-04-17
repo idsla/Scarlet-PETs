@@ -343,7 +343,7 @@ class BankClient(fl.client.Client):
 					cid = key
 					pub_key = RSA.import_key(value)
 					data_enc = encrypt_data_and_session_key(final_sum, pub_key, self.session_key_length)
-					if cid != 'swift':
+					if cid != 'pns':
 						data_enc2 = encrypt_bytes_with_public_key(final_key, pub_key, self.session_key_length)
 					else:
 						data_enc2 = ['', '', '']
@@ -381,8 +381,8 @@ class BankClient(fl.client.Client):
 			enc_hash_accounts2 = enc_hashed_banks(hash_accounts_array2, key=xor_key)
 
 			# encrypt bloomfilter
-			swift_pub_key = RSA.import_key(config['key'])
-			data_enc_bf = encryption_bf(bf_array, swift_pub_key, self.session_key_length)
+			pns_pub_key = RSA.import_key(config['key'])
+			data_enc_bf = encryption_bf(bf_array, pns_pub_key, self.session_key_length)
 			data_enc_bf = [np.array(value) for value in data_enc_bf]
 
 			# data sent

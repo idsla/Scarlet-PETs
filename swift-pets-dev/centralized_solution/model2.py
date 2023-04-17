@@ -14,12 +14,12 @@ from pathlib import Path
 import hashlib  # TODO:import hash function as crypt_hash
 
 
-def join_flags_to_swift_data(swift_df, bank_df):
+def join_flags_to_pns_data(pns_df, bank_df):
 	acc_flag = pd.Series(bank_df.Flags.values, index=bank_df.Account).to_dict()
-	swift_df['order_flag'] = swift_df['OrderingAccount'].map(acc_flag)
-	swift_df['bene_flag'] = swift_df['BeneficiaryAccount'].map(acc_flag)
+	pns_df['order_flag'] = pns_df['OrderingAccount'].map(acc_flag)
+	pns_df['bene_flag'] = pns_df['BeneficiaryAccount'].map(acc_flag)
 
-	return swift_df
+	return pns_df
 
 
 def rule_mining(data, threshold):
@@ -125,7 +125,7 @@ def generate_feature(
 
 def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
 	"""
-	from swift train and test data, extract more features
+	from pns train and test data, extract more features
 	"""
 	df["Timestamp"] = df["Timestamp"].astype("datetime64[ns]")
 	df["hour"] = df["Timestamp"].dt.hour.astype(str)
@@ -293,9 +293,9 @@ def compute_flag(row, bloom):
 		return True
 
 
-def add_BF_feature2(swift_df, bank):
+def add_BF_feature2(pns_df, bank):
 	logger.info("Extracting bloom filter features")
-	from bloom_filter import BloomFilter
+	from .bloom_filter import BloomFilter
 	bloom = BloomFilter(max_elements=bank.shape[0], error_rate=0.001)
 	bank['Account'] = bank['Account'].astype(str)
 	bank_nonflags = bank[bank['Flags'] == 0]
@@ -306,52 +306,52 @@ def add_BF_feature2(swift_df, bank):
 	for account in valid_accounts:
 		bloom.add(account)
 
-	swift_df['BeneficiaryAccount'] = swift_df['BeneficiaryAccount'].astype(str)
-	swift_df['OrderingAccount'] = swift_df['OrderingAccount'].astype(str)
-	swift_df['Hash1'] = swift_df['BeneficiaryAccount'] + swift_df['BeneficiaryName'].astype(str) + swift_df[
-		'BeneficiaryStreet'].astype(str) + swift_df['BeneficiaryCountryCityZip'].astype(str)
-	swift_df['Hash2'] = swift_df['OrderingAccount'] + swift_df['OrderingName'].astype(str) + swift_df[
-		'OrderingStreet'].astype(str) + swift_df['OrderingCountryCityZip'].astype(str)
+	pns_df['BeneficiaryAccount'] = pns_df['BeneficiaryAccount'].astype(str)
+	pns_df['OrderingAccount'] = pns_df['OrderingAccount'].astype(str)
+	pns_df['Hash1'] = pns_df['BeneficiaryAccount'] + pns_df['BeneficiaryName'].astype(str) + pns_df[
+		'BeneficiaryStreet'].astype(str) + pns_df['BeneficiaryCountryCityZip'].astype(str)
+	pns_df['Hash2'] = pns_df['OrderingAccount'] + pns_df['OrderingName'].astype(str) + pns_df[
+		'OrderingStreet'].astype(str) + pns_df['OrderingCountryCityZip'].astype(str)
 
-	swift_df['BF'] = swift_df.apply(lambda row: compute_flag(row, bloom), axis=1).astype('bool')
-	print(swift_df['BF'].value_counts())
-	swift_df = swift_df.drop(['Hash1', 'Hash2'], axis=1)
+	pns_df['BF'] = pns_df.apply(lambda row: compute_flag(row, bloom), axis=1).astype('bool')
+	print(pns_df['BF'].value_counts())
+	pns_df = pns_df.drop(['Hash1', 'Hash2'], axis=1)
 
-	return swift_df
+	return pns_df
 
 
-def add_BF_feature(swift_df, bank):
+def add_BF_feature(pns_df, bank):
 	logger.info("Extracting bloom filter features")
 
-	swift_df['Hash1'] = swift_df['BeneficiaryAccount'] + swift_df['BeneficiaryName'] + swift_df[
-		'BeneficiaryStreet'] + swift_df['BeneficiaryCountryCityZip']
-	swift_df['Hash2'] = swift_df['OrderingAccount'] + swift_df['OrderingName'] + swift_df[
-		'OrderingStreet'] + swift_df['OrderingCountryCityZip']
+	pns_df['Hash1'] = pns_df['BeneficiaryAccount'] + pns_df['BeneficiaryName'] + pns_df[
+		'BeneficiaryStreet'] + pns_df['BeneficiaryCountryCityZip']
+	pns_df['Hash2'] = pns_df['OrderingAccount'] + pns_df['OrderingName'] + pns_df[
+		'OrderingStreet'] + pns_df['OrderingCountryCityZip']
 
 	bank_non_flagged = bank[bank['Flags'] == 0]
 	bank_non_flagged['Hash'] = bank_non_flagged['Account'] + bank_non_flagged['Name'] + bank_non_flagged['Street'] + \
 	                           bank_non_flagged['CountryCityZip']
 
-	swift_join1 = pd.merge(
-		swift_df, bank_non_flagged, how='left', left_on=['BeneficiaryAccount'],
+	pns_join1 = pd.merge(
+		pns_df, bank_non_flagged, how='left', left_on=['BeneficiaryAccount'],
 		right_on=['Account']
 	)
-	swift_join2 = pd.merge(
-		swift_df, bank_non_flagged, how='left', left_on=['OrderingAccount'],
+	pns_join2 = pd.merge(
+		pns_df, bank_non_flagged, how='left', left_on=['OrderingAccount'],
 		right_on=['Account']
 	)
 
-	simple_anos_1 = swift_join1[(swift_join1['Hash1'] != swift_join1['Hash'])].index
-	simple_anos_2 = swift_join2[(swift_join2['Hash2'] != swift_join2['Hash'])].index
+	simple_anos_1 = pns_join1[(pns_join1['Hash1'] != pns_join1['Hash'])].index
+	simple_anos_2 = pns_join2[(pns_join2['Hash2'] != pns_join2['Hash'])].index
 
 	simple_anos = list(set(simple_anos_1).union(simple_anos_2))
 
-	swift_df['BF'] = [0 for _ in range(len(swift_df))]
-	swift_df['BF'].mask(swift_df.reset_index().index.isin(simple_anos), 1, inplace=True)
+	pns_df['BF'] = [0 for _ in range(len(pns_df))]
+	pns_df['BF'].mask(pns_df.reset_index().index.isin(simple_anos), 1, inplace=True)
 
-	swift_df = swift_df.drop(['Hash1', 'Hash2'], axis=1)
+	pns_df = pns_df.drop(['Hash1', 'Hash2'], axis=1)
 
-	return swift_df
+	return pns_df
 
 
 def gb_xgb_cv(params, X, Y, random_state):
@@ -369,7 +369,7 @@ def gb_xgb_cv(params, X, Y, random_state):
 	return score
 
 
-class SwiftModel:
+class PNSModel:
 	def __init__(self):
 		pass
 

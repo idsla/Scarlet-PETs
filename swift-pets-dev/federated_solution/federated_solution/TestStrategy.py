@@ -31,7 +31,7 @@ class TestStrategy(fl.server.strategy.Strategy):
         secure_sum (ndarray): Save encrypted secure sum computation result.
         final_sum_all (ndarray): Collection of encrtped sum using different session keys.
         banks_partition (dict): Store banks of each client partition.
-        hashed_accounts (ndarray): Hashed accounts from swift.
+        hashed_accounts (ndarray): Hashed accounts from pns.
         server_dir (Path): Path to the server directory.
 
     Methods
@@ -57,7 +57,7 @@ class TestStrategy(fl.server.strategy.Strategy):
         self.secure_sum = None  # save encrypted secure sum computation result
         self.final_sum_all = None  # collection of encrtped sum using different session keys
         self.banks_partition = None  # store banks of each client partition
-        self.hashed_accounts = None  # hashed accounts from swift
+        self.hashed_accounts = None  # hashed accounts from pns
         self.server_dir = server_dir
         super().__init__()
 
@@ -76,7 +76,7 @@ class TestStrategy(fl.server.strategy.Strategy):
         # empty parameters
         server_parameters = [np.array([])]
         clients = client_manager.all()
-        self.bank_ids = [cid for cid in clients.keys() if cid != 'swift']
+        self.bank_ids = [cid for cid in clients.keys() if cid != 'pns']
         return ndarrays_to_parameters(server_parameters)
 
     def configure_fit(self, server_round, parameters, client_manager):
@@ -94,7 +94,7 @@ class TestStrategy(fl.server.strategy.Strategy):
         """
         # get all clients
         clients = client_manager.all()
-        bank_cids = [cid for cid in clients.keys() if cid != 'swift']
+        bank_cids = [cid for cid in clients.keys() if cid != 'pns']
         num_banks = len(bank_cids)
 
         # first round -> tell clients to send public key
@@ -106,19 +106,19 @@ class TestStrategy(fl.server.strategy.Strategy):
             return ret
         # second round -> tell clients to share bank in partition
         elif server_round == 2:
-            config = {'task': 'share_bank_in_partition', 'key': self.public_keys_dict['swift']}
+            config = {'task': 'share_bank_in_partition', 'key': self.public_keys_dict['pns']}
             ret = []
             for cid in clients.keys():
-                if cid != 'swift':
+                if cid != 'pns':
                     ret.append((clients[cid], FitIns(parameters, config)))
             return ret
-        # third round -> tell swift clients bank partitions
+        # third round -> tell pns clients bank partitions
         elif server_round == 3:
-            config = {'task': 'send_swift_banks_in_partitions'}
+            config = {'task': 'send_pns_banks_in_partitions'}
             for cid in bank_cids:
                 config[cid] = self.public_keys_dict[cid]
             ret = [
-                (clients['swift'], FitIns(ndarrays_to_parameters(self.banks_partition), config))
+                (clients['pns'], FitIns(ndarrays_to_parameters(self.banks_partition), config))
             ]
             return ret
         # next num_banks rounds -> compute secure sum -> bank1 L = s0 + R -> bank2 L + S1 + -> ... -> bankN L + SN
@@ -148,7 +148,7 @@ class TestStrategy(fl.server.strategy.Strategy):
         elif server_round == 4 + num_banks + 1:
             ret = []
             for cid in clients.keys():
-                config = {'task': 'build-local-bloomfilter', 'key': self.public_keys_dict['swift']}
+                config = {'task': 'build-local-bloomfilter', 'key': self.public_keys_dict['pns']}
                 data_sent = assembling_final_sum_with_hashed_accounts(self.final_sum_all, self.hashed_accounts)
                 parameters = ndarrays_to_parameters(data_sent)
                 ret.append(
@@ -194,7 +194,7 @@ class TestStrategy(fl.server.strategy.Strategy):
         elif server_round == 3:
             # print("Agg round {} - Results: {}".format(server_round, results))
             for client, FitRes in results:
-                if client.cid == 'swift':
+                if client.cid == 'pns':
                     data_received = parameters_to_ndarrays(FitRes.parameters)
                     self.hashed_accounts = data_received
             return empty_parameters(), {}
@@ -227,7 +227,7 @@ class TestStrategy(fl.server.strategy.Strategy):
         # aggregate local bloom filters
         elif server_round == 4 + num_banks + 1:
             for client, FitRes in results:
-                if client.cid != 'swift':
+                if client.cid != 'pns':
                     data_enc = parameters_to_ndarrays(FitRes.parameters)
                     self.bloom_filters[client.cid] = data_enc  # bloom filter + encrypted hash accounts
             return empty_parameters(), {}
@@ -250,19 +250,19 @@ class TestStrategy(fl.server.strategy.Strategy):
 
         # get all clients
         clients = client_manager.all()
-        bank_cids = [cid for cid in clients.keys() if cid != 'swift']
+        bank_cids = [cid for cid in clients.keys() if cid != 'pns']
         num_banks = len(bank_cids)
 
-        # send encrypted bloom filter to swift
+        # send encrypted bloom filter to pns
         if server_round == 4 + num_banks + 1:
             ret = []
-            config = {'task': 'swift_run_test'}
+            config = {'task': 'pns_run_test'}
             data_sent = []
             #print(len(self.bloom_filters))
             for cid, bf_enc in self.bloom_filters.items():
                 data_sent.extend(bf_enc)
             parameters = ndarrays_to_parameters(data_sent)
-            ret.append((clients['swift'], FitIns(parameters, config)))
+            ret.append((clients['pns'], FitIns(parameters, config)))
             return ret
 
         else:

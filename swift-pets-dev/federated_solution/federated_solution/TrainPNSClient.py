@@ -1,5 +1,5 @@
 """
-This file contains class of client for swift in training phase.
+This file contains class of client for pns in training phase.
 """
 
 from pathlib import Path
@@ -30,7 +30,7 @@ from .utils_basic import (
 )
 from .bloom_filter import BloomFilter
 from .model3 import (
-	extract_feature, SwiftModel, add_BF_feature2,
+	extract_feature, PNSModel, add_BF_feature2,
 )
 from .utils_advanced import (
 	decrypt_bytes_with_private_key,
@@ -42,9 +42,9 @@ from .utils_advanced import (
 import time
 
 
-class TrainSwiftClient(fl.client.Client):
+class TrainPNSClient(fl.client.Client):
 	"""
-	Client for swift in training phase
+	Client for pns in training phase
 
 	Parameters
 	----------
@@ -191,7 +191,7 @@ class TrainSwiftClient(fl.client.Client):
 
 	def fit(self, ins: FitIns) -> FitRes:
 		"""
-		Fit function for swift, execute certain actions based on fit instruction and return fit result to server
+		Fit function for pns, execute certain actions based on fit instruction and return fit result to server
 		Parameters
 		----------
 		ins: FitIns -  Fit instruction from server
@@ -217,8 +217,8 @@ class TrainSwiftClient(fl.client.Client):
 				num_examples=1,
 				metrics={}
 			)
-		# Instruction2: send encrypted and hashed banks list in swift side -> return banks list of client to server
-		elif task == 'send_swift_banks_in_partitions':
+		# Instruction2: send encrypted and hashed banks list in pns side -> return banks list of client to server
+		elif task == 'send_pns_banks_in_partitions':
 			client_banks_partition = {}
 			data_received = parameters_to_ndarrays(global_parameters)
 			for i in range(len(data_received) // 4):
@@ -255,8 +255,8 @@ class TrainSwiftClient(fl.client.Client):
 			if total_sum is None:
 				raise ValueError('Total sum cannot be decryption in {}'.format(self.cid))
 
-			swift_internal_state = {'total_sum': total_sum}
-			self.save_state(swift_internal_state, 'internal_state.pkl')
+			pns_internal_state = {'total_sum': total_sum}
+			self.save_state(pns_internal_state, 'internal_state.pkl')
 
 
 			return FitRes(
@@ -267,7 +267,7 @@ class TrainSwiftClient(fl.client.Client):
 			)
 
 		# Instruction4: train model to detection anomaly after receiving all necessary information from server
-		elif task == 'swift_run_train':
+		elif task == 'pns_run_train':
 			if 'total_sum' in self.internal_state:
 				total_sum = self.internal_state['total_sum']
 			else:
@@ -298,15 +298,15 @@ class TrainSwiftClient(fl.client.Client):
 			# Training model
 			############################################################################################################
 			logger.info("Start Training ...")
-			swift_df = self.data
+			pns_df = self.data
 			logger.info("Adding BF and extracting features")
-			swift_df = add_BF_feature2(swift_df, bloom, hashed_accounts_dict1, hashed_accounts_dict2)
+			pns_df = add_BF_feature2(pns_df, bloom, hashed_accounts_dict1, hashed_accounts_dict2)
 			logger.info("Adding BF and extracting features")
-			swift_df = extract_feature(swift_df, self.client_dir, phase='train', epsilon=0.25, dp_flag=True)
-			swift_model = SwiftModel()
-			logger.info("Fitting SWIFT model...")
-			swift_model.fit(X=swift_df.drop(['Label'], axis=1), y=swift_df["Label"])
-			swift_model.save(Path.joinpath(self.client_dir, "swift_model.joblib"))
+			pns_df = extract_feature(pns_df, self.client_dir, phase='train', epsilon=0.25, dp_flag=True)
+			pns_model = PNSModel()
+			logger.info("Fitting pns model...")
+			pns_model.fit(X=pns_df.drop(['Label'], axis=1), y=pns_df["Label"])
+			pns_model.save(Path.joinpath(self.client_dir, "pns_model.joblib"))
 
 
 
@@ -326,7 +326,7 @@ class TrainSwiftClient(fl.client.Client):
 
 	def evaluate(self, ins: EvaluateIns) -> EvaluateRes:
 		"""
-		evaluation function for swift
+		evaluation function for pns
 		Parameters
 		----------
 		ins: EvaluateIns - evaluation instruction

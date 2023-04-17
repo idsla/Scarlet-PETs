@@ -10,8 +10,8 @@ from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 
 from federated_solution.BankClient import BankClient
-from federated_solution.TrainSwiftClient import TrainSwiftClient
-from federated_solution.TestSwiftClient import TestSwiftClient
+from federated_solution.TrainPNSClient import TrainPNSClient
+from federated_solution.TestPNSClient import TestPNSClient
 from federated_solution.utils_basic import convert_bank_valid_accounts_list
 from federated_solution.utils_advanced import get_unique_banks
 
@@ -20,11 +20,11 @@ def client_fn_train(cid: str) -> fl.client.Client:
 	"""Create a Flower client representing a single organization."""
 	session_key_length = 16
 	# Load model
-	if cid == 'swift':
-		data_path = './federated_solution/data/scenario01/train/swift/dev_swift_transaction_train_dataset.csv'
-		client_dir = Path('./federated_solution/state/swift/')
+	if cid == 'pns':
+		data_path = './federated_solution/data/scenario01/train/pns/dev_pns_transaction_train_dataset.csv'
+		client_dir = Path('./federated_solution/state/pns/')
 		data = pd.read_csv(data_path, index_col="MessageId")
-		return TrainSwiftClient(
+		return TrainPNSClient(
 			cid, client_dir, data, session_key_length, error_rate=0.1
 		)
 	else:
@@ -43,13 +43,13 @@ def client_fn_test(cid: str) -> fl.client.Client:
 	"""Create a Flower client representing a single organization."""
 	session_key_length = 16
 	# Load model
-	if cid == 'swift':
-		data_path = './federated_solution/data/scenario01/test/swift/dev_swift_transaction_test_dataset.csv'
-		client_dir = Path('./federated_solution/state/swift/')
-		preds_dest_path = Path('./federated_solution/data/scenario01/test/swift/')
-		preds_format_path = Path('./federated_solution/data/scenario01/test/swift/predictions_format.csv')
+	if cid == 'pns':
+		data_path = './federated_solution/data/scenario01/test/pns/dev_pns_transaction_test_dataset.csv'
+		client_dir = Path('./federated_solution/state/pns/')
+		preds_dest_path = Path('./federated_solution/data/scenario01/test/pns/')
+		preds_format_path = Path('./federated_solution/data/scenario01/test/pns/predictions_format.csv')
 		data = pd.read_csv(data_path, index_col="MessageId")
-		return TestSwiftClient(
+		return TestPNSClient(
 			cid, data, client_dir, session_key_length=session_key_length, error_rate=0.1,
 			preds_dest_path=preds_dest_path, preds_format_path=preds_format_path, evaluation=True
 		)
@@ -167,7 +167,7 @@ if __name__ == '__main__':
 	import time
 
 	server_dir = Path('./federated_solution/state/server/')
-	clients = ['swift', 'bank01', 'bank02', 'bank03', 'bank04']
+	clients = ['pns', 'bank01', 'bank02', 'bank03', 'bank04']
 	num_rounds = len(clients) + 7
 	client_dirs_dict = {
 		client: Path('./federated_solution/state/{}/'.format(client))

@@ -1,5 +1,5 @@
 """
-This file is the swift client side of the federated learning system in testing phase.
+This file is the pns client side of the federated learning system in testing phase.
 """
 from pathlib import Path
 from typing import Union
@@ -27,7 +27,7 @@ from .utils_basic import (
 )
 from .bloom_filter import BloomFilter
 from .model3 import (
-	extract_feature, SwiftModel, add_BF_feature2,
+	extract_feature, PNSModel, add_BF_feature2,
 )
 from .utils_advanced import (
 	decrypt_bytes_with_private_key,
@@ -37,9 +37,9 @@ from .utils_advanced import (
 )
 
 
-class TestSwiftClient(fl.client.Client):
+class TestPNSClient(fl.client.Client):
 	"""
-	This class is the swift client side of the federated learning system in testing phase.
+	This class is the pns client side of the federated learning system in testing phase.
 
 	Parameters
 	----------
@@ -220,7 +220,7 @@ class TestSwiftClient(fl.client.Client):
 				metrics={}
 			)
 		# Instruction2: send encrypted and hashed banks of client to server
-		elif task == 'send_swift_banks_in_partitions':
+		elif task == 'send_pns_banks_in_partitions':
 			# receive banks for each partition and store it in dict {cid: list of banks at cid}
 			client_banks_partition = {}
 			data_received = parameters_to_ndarrays(global_parameters)
@@ -257,9 +257,9 @@ class TestSwiftClient(fl.client.Client):
 			if total_sum is None:
 				raise ValueError('Total sum cannot be decryption in {}'.format(self.cid))
 
-			swift_internal_state = {'total_sum': total_sum}
+			pns_internal_state = {'total_sum': total_sum}
 			# print(f"{self.cid} total sum - {total_sum}")
-			self.save_state(swift_internal_state, 'internal_state.pkl')
+			self.save_state(pns_internal_state, 'internal_state.pkl')
 			return FitRes(
 				status=Status(code=Code.OK, message='Success'),
 				parameters=ndarrays_to_parameters([]),
@@ -282,7 +282,7 @@ class TestSwiftClient(fl.client.Client):
 		task = config['task']
 
 		# Instruction1: test model based on trained model
-		if task == 'swift_run_test':
+		if task == 'pns_run_test':
 			# get total sum
 			if 'total_sum' in self.internal_state:
 				total_sum = self.internal_state['total_sum']
@@ -309,33 +309,33 @@ class TestSwiftClient(fl.client.Client):
 
 			# Testing
 			logger.info("Start Testing ...")
-			swift_df = self.data
+			pns_df = self.data
 			logger.info("Adding BF and extracting features")
-			swift_df = add_BF_feature2(swift_df, bloom, hashed_accounts_dict1, hashed_accounts_dict2)
-			swift_df = extract_feature(swift_df, self.client_dir, phase='test', epsilon=0.25, dp_flag=False)
+			pns_df = add_BF_feature2(pns_df, bloom, hashed_accounts_dict1, hashed_accounts_dict2)
+			pns_df = extract_feature(pns_df, self.client_dir, phase='test', epsilon=0.25, dp_flag=False)
 
-			logger.info("Loading SWIFT model...")
+			logger.info("Loading pns model...")
 			if self.evaluation:
-				swift_model = SwiftModel.load(Path.joinpath(self.client_dir, "swift_model.joblib"))
-				swift_preds = swift_model.predict(swift_df.drop(['Label'], axis=1))
+				pns_model = PNSModel.load(Path.joinpath(self.client_dir, "pns_model.joblib"))
+				pns_preds = pns_model.predict(pns_df.drop(['Label'], axis=1))
 
 				preds_format_df = pd.read_csv(self.preds_format_path, index_col="MessageId")
-				preds_format_df["Score"] = preds_format_df.index.map(swift_preds)
+				preds_format_df["Score"] = preds_format_df.index.map(pns_preds)
 
 				print(
 					"AUPRC:",
-					metrics.average_precision_score(y_true=swift_df['Label'], y_score=preds_format_df["Score"])
+					metrics.average_precision_score(y_true=pns_df['Label'], y_score=preds_format_df["Score"])
 					)
 
 				logger.info("Writing out test predictions...")
 				preds_format_df.to_csv(self.preds_dest_path)
 				logger.info("Done.")
 			else:
-				swift_model = SwiftModel.load(Path.joinpath(self.client_dir, "swift_model.joblib"))
-				swift_preds = swift_model.predict(swift_df)
+				pns_model = PNSModel.load(Path.joinpath(self.client_dir, "pns_model.joblib"))
+				pns_preds = pns_model.predict(pns_df)
 
 				preds_format_df = pd.read_csv(self.preds_format_path, index_col="MessageId")
-				preds_format_df["Score"] = preds_format_df.index.map(swift_preds)
+				preds_format_df["Score"] = preds_format_df.index.map(pns_preds)
 
 				logger.info("Writing out test predictions...")
 				preds_format_df.to_csv(self.preds_dest_path)

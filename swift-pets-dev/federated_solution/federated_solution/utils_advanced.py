@@ -163,8 +163,8 @@ def assembling_final_sum_with_hashed_accounts(final_sum_list: List, hashed_accou
     ret = []
     for i in range(len(final_sum_list) // 7):
         cid = final_sum_list[7 * i].item()
-        if cid == 'swift':
-            # hash array for swift is empty
+        if cid == 'pns':
+            # hash array for pns is empty
             hash_array1 = np.array([])
             hash_array2 = np.array([])
             # assemble final results including cid, encrypted final sum, and hash array
