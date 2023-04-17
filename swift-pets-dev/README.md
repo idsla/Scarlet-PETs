@@ -109,4 +109,4 @@ We provide a simple self generated fake synthetic demo datasets to under `/data`
 
 ### Federated Learning Solution
 
-[Federated Solution Documentation](./federated_solution/READ.md)
+[Federated Solution Documentation](./federated_solution/README.md)
