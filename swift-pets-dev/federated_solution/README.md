@@ -48,7 +48,7 @@ Our solution for federated learning is built upon the [Flower framework]([Flower
 - `bloomfilter.py` contains our implementation of a simple bloom filter
 - `utils_basic.py` `utils_advanced.py`contains functions to compute hashing, encryption and decryption for secure communication and some data preprocessing functions
 
-## Step by Step Illustration of the Whole Process our Solution
+## Our Solution: Step-by-Step Illustration of the Computational Process
 
 ###  Whole Run Flow
 
