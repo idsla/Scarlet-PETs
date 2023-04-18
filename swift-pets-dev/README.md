@@ -79,7 +79,7 @@ Details see the following link:
 
 ### Demo Datasets
 
-Due to the confidentiality and privacy constraints, the dataset for the competetion is not released publically. Therefore, to help you run the program, we have crafted a fake synthetic demo dataset, which is provided under **`new_data/`** folder of `/federated_solutution` and `/centralized_solution`. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of which contains the data owned by the client. That is, each bank client will have data of its own accounts, and payment network system will have access to teh transaction data.
+Due to the confidentiality and privacy constraints, the dataset for the competetion is not released publically. Therefore, to help you run the program, we have crafted a fake synthetic demo dataset, which is provided under **`new_data/`** folder of `/federated_solutution` and `/centralized_solution`. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of which contains the data owned by the client. That is, each bank client will have data of its own accounts, and payment network system (PNS) will have access to the transaction data.
 
 #### Account Dataset owned by Bank Clients
 
@@ -98,7 +98,7 @@ Example of a synthetic fake dataset used in demo is as follows:
 
 #### Transaction Dataset owned by Payment System Organization
 
-The general format of dataset for payment system organization client is as follows:
+The general format of dataset for PNS client is as follows:
 
 - **Transaction IDs:** `TransactionId`
 
@@ -107,7 +107,7 @@ The general format of dataset for payment system organization client is as follo
 - **Transaction Currency and Amount:** `SettlementAmount`, `InstructedAmount`, `SettlementCurrency`, `InstructedCurrency`
 - **Label:** whether transaction is anomalous or not
 
-Example of a synthetic fake dataset used in demo is as follows:
+Example of a synthetic fake demo dataset is as follows:
 
 | TransactionId | Timestamp      | Sender   | Receiver | OrderingAccount | OrderingName | OrderingStreet | OrderingCountryCityZip | BeneficiaryAccount | BeneficiaryName | BeneficiaryStreet | BeneficiaryCountryCityZip | SettlementDate | SettlementCurrency | SettlementAmount | InstructedCurrency | InstructedAmount | Label |
 | ------------- | -------------- | -------- | -------- | --------------- | ------------ | -------------- | ---------------------- | ------------------ | --------------- | ----------------- | ------------------------- | -------------- | ------------------ | ---------------- | ------------------ | ---------------- | ----- |
@@ -117,7 +117,7 @@ Example of a synthetic fake dataset used in demo is as follows:
 
 #### Training and Testing Data of Payment System Organization
 
-Payment system owns the transaction data, and the anormal transaction detection will be operated at its side, so it also contains the **label** which denotes whether a transaction is abnormal or not. The after containing the labels, the transaction data will be split into training and test data for training and evaluate a machine learning model for detecting abnormal transaction. `Transaction_train.csv` and `Transaction_test.csv` are training and test data.
+PNS client owns the transaction data, and the anomaly transaction detection will be carried out at its side; note that transaction data also contains the **label** which denotes whether a transaction is anomaly or not. The transaction data will be split into training and test data to learn and evalute the anomaly detection model. `Transaction_train.csv` and `Transaction_test.csv` respectively contain training and test data.
 
 ## Solution
 
