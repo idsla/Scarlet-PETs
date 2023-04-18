@@ -102,7 +102,7 @@ Example of a synthetic fake dataset used in demo is as follows:
 
 The general format of dataset for payment system organization client is as follows:
 
-- **Transaction IDs:** `MessageId`, `UETR`, `TransactionReference`
+- **Transaction IDs:** `TransactionId`
 
 - **Transaction Time:** `Timestamp`, `SettlementDate`
 - **Transaction Accounts:** `Sender`, `Receiver`, `OrderingAccount`, `BeneficaryAccount`, ...
@@ -111,12 +111,11 @@ The general format of dataset for payment system organization client is as follo
 
 Example of a synthetic fake dataset used in demo is as follows:
 
-| MessageId                            | Timestamp       | UETR                                 | Sender   | Receiver | TransactionReference | OrderingAccount | OrderingName | OrderingStreet | OrderingCountryCityZip | BeneficiaryAccount | BeneficiaryName | BeneficiaryStreet | BeneficiaryCountryCityZip | SettlementDate | SettlementCurrency | SettlementAmount | InstructedCurrency | InstructedAmount | Label |
-| ------------------------------------ | --------------- | ------------------------------------ | -------- | -------- | -------------------- | --------------- | ------------ | -------------- | ---------------------- | ------------------ | --------------- | ----------------- | ------------------------- | -------------- | ------------------ | ---------------- | ------------------ | ---------------- | ----- |
-| ee31fd3a-9024-42c6-9440-460767522c76 | 2/6/2035 17:44  | b5d765cd-adbf-4e15-a858-ac883ab75a11 | BANK6242 | BANK1682 | tranref15            | ACCOUNT421876   | acctname60   | address 111    | country_city_zip 90    | ACCOUNT551369      | acctname154     | address 197       | country_city_zip 132      | 350206         | currency 4         | 92199419164      | currency 4         | 92199419164      | 0     |
-| d603f200-3735-4cfb-a7bd-dda2027a2535 | 2/9/2035 23:21  | ec248da4-5073-41f6-ba03-7662f718464c | BANK2501 | BANK1682 | tranref52            | ACCOUNT3176524  | acctname192  | address 38     | country_city_zip 160   | ACCOUNT1           | acctname86      | address 76        | country_city_zip 99       | 350209         | currency 4         | 39253626474      | currency 4         | 39253626474      | 1     |
-| 182dcb62-6abf-4368-a481-99e9c84afef4 | 2/3/2035 4:10   | fe0f3e60-90bb-456d-a29f-2287f5371ed8 | BANK65   | BANK2602 | tranref60            | ACCOUNT6331626  | acctname152  | address 127    | country_city_zip 49    | ACCOUNT857376      | acctname37      | address 34        | country_city_zip 101      | 220218         | currency 14        | 3.47E+11         | currency 6         | 3.47E+11         | 1     |
-| 6e44138d-37a8-4526-9da9-e1bd26415550 | 2/20/2035 22:41 | 48bdb6a5-f12c-47e2-aa3f-c40a36bfe7a2 | BANK2705 | BANK2602 | tranref66            | ACCOUNT3375001  | acctname70   | address 144    | country_city_zip 75    | ACCOUNT6539204     | acctname121     | address 130       | country_city_zip 127      | 220220         | currency 14        | 2.3789E+11       | currency 14        | 2.3789E+11       | 1     |
+| TransactionId | Timestamp      | Sender   | Receiver | OrderingAccount | OrderingName | OrderingStreet | OrderingCountryCityZip | BeneficiaryAccount | BeneficiaryName | BeneficiaryStreet | BeneficiaryCountryCityZip | SettlementDate | SettlementCurrency | SettlementAmount | InstructedCurrency | InstructedAmount | Label |
+| ------------- | -------------- | -------- | -------- | --------------- | ------------ | -------------- | ---------------------- | ------------------ | --------------- | ----------------- | ------------------------- | -------------- | ------------------ | ---------------- | ------------------ | ---------------- | ----- |
+| M1            | 2/6/2055 17:44 | BANK6242 | BANK1682 | ACCOUNT421876   | acctname60   | address 111    | country_city_zip 90    | ACCOUNT551369      | acctname154     | address 197       | country_city_zip 132      | 550206         | currency 41        | 1                | currency 4         | 1                | 0     |
+| M2            | 2/9/2055 23:21 | BANK2501 | BANK1682 | ACCOUNT3176524  | acctname192  | address 38     | country_city_zip 160   | ACCOUNT1           | acctname86      | address 76        | country_city_zip 99       | 550209         | currency 4         | 1                | currency 4         | 1                | 1     |
+| M3            | 2/3/2055 4:10  | BANK65   | BANK2602 | ACCOUNT6331626  | acctname152  | address 127    | country_city_zip 49    | ACCOUNT857376      | acctname37      | address 34        | country_city_zip 101      | 290218         | currency 141       | 1                | currency 6         | 1                | 1     |
 
 #### Training and Testing Data of Payment System Organization
 

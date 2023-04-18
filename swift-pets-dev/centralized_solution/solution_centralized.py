@@ -22,7 +22,7 @@ from model2 import (
 
 def fit(pns_data_path, bank_data_path, model_dir):
     logger.info("Preparing data")
-    pns_df = pd.read_csv(pns_data_path, index_col="MessageId")
+    pns_df = pd.read_csv(pns_data_path, index_col="TransactionId")
     bank = pd.read_csv(bank_data_path)
     t0 = time.time()
     pns_df = add_BF_feature(pns_df, bank)
@@ -51,7 +51,7 @@ def fit(pns_data_path, bank_data_path, model_dir):
 
 def predict(pns_data_path, bank_data_path, model_dir):
     logger.info("Preparing data")
-    pns_df = pd.read_csv(pns_data_path, index_col="MessageId")
+    pns_df = pd.read_csv(pns_data_path, index_col="TransactionId")
     bank = pd.read_csv(bank_data_path)
 
     pns_df = add_BF_feature(pns_df, bank)
@@ -64,7 +64,7 @@ def predict(pns_data_path, bank_data_path, model_dir):
     pns_model = PNSModel.load(Path.joinpath(model_dir , "pns_model.joblib"))
     pns_preds = pns_model.predict(pns_df.drop(['Label'], axis=1))
 
-    # preds_format_df = pd.read_csv(preds_format_path, index_col="MessageId")
+    # preds_format_df = pd.read_csv(preds_format_path, index_col="TransactionId")
     # preds_format_df["Score"] = preds_format_df.index.map(pns_preds)
 
     print("AUPRC:", metrics.average_precision_score(y_true=pns_df['Label'], y_score=pns_preds))
