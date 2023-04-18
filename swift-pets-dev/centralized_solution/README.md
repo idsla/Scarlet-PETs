@@ -13,7 +13,7 @@ Python solution_centralized.py
 ## Features Computed
 
 - **Sender Bank Hourly Frequency**: how many transactions sender bank makes in each hour, indexed as 0 - 23
-- **Receiver Bank Hourly Frequency**: how many transactions recevier bank makes in each hour, indexed as 0 - 23
+- **Receiver Bank Hourly Frequency**: how many transactions receiver bank makes in each hour, indexed as 0 - 23
 - **Sender Currency Frequency:** how often a currency is used in transactions by a sender bank to send funds
 - **Receiver Currency Frequency:** how often a currency is used in transactions for a receiver bank to receive funds
 - **Sender Currency Average Amount:** Average amount (per currency) per transaction by a sender bank
@@ -24,7 +24,7 @@ Python solution_centralized.py
 
 
 
-## Solution Inllustration
+## Our Solution Overview
 
 Code files related:
 
