@@ -3,5 +3,3 @@
 */.ipynb_checkpoints
 */.log
 **/__pycache__
-*.csv
-!swift-pets-dev/*.csv
