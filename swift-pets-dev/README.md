@@ -1,4 +1,4 @@
-# Private Preserving Federated Learning for Financial Transaction Anomaly Detection
+# Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning for Financial Crime Prevention
 
 ## Link to the Competition
 - https://www.drivendata.org/competitions/group/nist-federated-learning/
@@ -38,7 +38,7 @@
 
   - mmh3 - to compute hash value
   - pycryptodome - to encrypt and decrypt data
-  - xgboost - train model
+  - xgboost - to train model
   - flower - federated learning framework
   - others: joblib, loguru, hyperopt, scikit-learn
 
@@ -60,13 +60,11 @@
   python solution_federated.py
   ```
 
-## Problem Description: US-PETS Financial Crime Prize
+## Problem Description: US-PETs Financial Crime Prize
 
 The United Nations estimates that up to $2 trillion of cross-border money laundering takes place each year, financing
 organized crime and undermining economic prosperity. Financial institutions such as banks and credit agencies, along
-with organizations that process transactions between institutions must protect personal and financial data, while also trying to report and deter illicit financial activities. Under this context, we will design and later develop innovative privacy-preserving federated
-learning solutions that facilitate cross-institution and cross-border anomaly detection to combat financial crime. This
-use case features both vertical and horizontal data partitioning.
+with organizations that process transactions between institutions must protect personal and financial data, while also trying to report and deter illicit financial activities. In this context, we have designed and developed an innovative privacy-preserving federated learning solution that facilitates cross-institution and cross-border anomaly detection to combat financial crime. This use case features both vertical and horizontal data partitioning.
 ![alt text](./image/problem.png)
 
 Details see the following link:
@@ -81,7 +79,7 @@ Details see the following link:
 
 ### Demo Datasets
 
-Because the competition organization will not release the data used in competition to public. We provide a simple self generated fake synthetic demo dataset under **`new_data/`** folder of `/federated_solutution` and `/centralized_solution` so that one can run our program. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of them contains the the data owned by client, for example, a bank client will has its own accounts dataset and payment system organization client will have it own transaction data.
+Due to the confidentiality and privacy constraints, the dataset for the competetion is not released publically. Therefore, to help you run the program, we have crafted a fake synthetic demo dataset, which is provided under **`new_data/`** folder of `/federated_solutution` and `/centralized_solution`. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of which contains the data owned by the client. That is, each bank client will have data of its own accounts, and payment network system (PNS) will have access to the transaction data.
 
 #### Account Dataset owned by Bank Clients
 
@@ -100,7 +98,7 @@ Example of a synthetic fake dataset used in demo is as follows:
 
 #### Transaction Dataset owned by Payment System Organization
 
-The general format of dataset for payment system organization client is as follows:
+The general format of dataset for PNS client is as follows:
 
 - **Transaction IDs:** `TransactionId`
 
@@ -109,7 +107,7 @@ The general format of dataset for payment system organization client is as follo
 - **Transaction Currency and Amount:** `SettlementAmount`, `InstructedAmount`, `SettlementCurrency`, `InstructedCurrency`
 - **Label:** whether transaction is anomalous or not
 
-Example of a synthetic fake dataset used in demo is as follows:
+Example of a synthetic fake demo dataset is as follows:
 
 | TransactionId | Timestamp      | Sender   | Receiver | OrderingAccount | OrderingName | OrderingStreet | OrderingCountryCityZip | BeneficiaryAccount | BeneficiaryName | BeneficiaryStreet | BeneficiaryCountryCityZip | SettlementDate | SettlementCurrency | SettlementAmount | InstructedCurrency | InstructedAmount | Label |
 | ------------- | -------------- | -------- | -------- | --------------- | ------------ | -------------- | ---------------------- | ------------------ | --------------- | ----------------- | ------------------------- | -------------- | ------------------ | ---------------- | ------------------ | ---------------- | ----- |
@@ -119,7 +117,7 @@ Example of a synthetic fake dataset used in demo is as follows:
 
 #### Training and Testing Data of Payment System Organization
 
-Payment system owns the transaction data, and the anormal transaction detection will be operated at its side, so it also contains the **label** which denotes whether a transaction is abnormal or not. The after containing the labels, the transaction data will be split into training and test data for training and evaluate a machine learning model for detecting abnormal transaction. `Transaction_train.csv` and `Transaction_test.csv` are training and test data.
+PNS client owns the transaction data, and the anomaly transaction detection will be carried out at its side; note that transaction data also contains the **label** which denotes whether a transaction is anomaly or not. The transaction data will be split into training and test data to learn and evalute the anomaly detection model. `Transaction_train.csv` and `Transaction_test.csv` respectively contain training and test data.
 
 ## Solution
 
