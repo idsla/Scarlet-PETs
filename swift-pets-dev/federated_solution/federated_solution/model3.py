@@ -269,10 +269,8 @@ def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
 			df = df.drop([pivot_name], axis=1)
 
 	columns_to_drop = [
-		"UETR",
 		"Sender",
 		"Receiver",
-		"TransactionReference",
 		"OrderingAccount",
 		"OrderingName",
 		"OrderingStreet",

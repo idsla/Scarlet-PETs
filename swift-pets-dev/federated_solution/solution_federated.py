@@ -23,7 +23,7 @@ def client_fn_train(cid: str) -> fl.client.Client:
 	if cid == 'pns':
 		data_path = './federated_solution/new_data/scenario01/train/pns/pns_transaction_train.csv'
 		client_dir = Path('./federated_solution/state/pns/')
-		data = pd.read_csv(data_path, index_col="MessageId")
+		data = pd.read_csv(data_path, index_col="TransactionId")
 		return TrainPNSClient(
 			cid, client_dir, data, session_key_length, error_rate=0.1
 		)
@@ -46,7 +46,7 @@ def client_fn_test(cid: str) -> fl.client.Client:
 	if cid == 'pns':
 		data_path = './federated_solution/new_data/scenario01/test/pns/pns_transaction_test.csv'
 		client_dir = Path('./federated_solution/state/pns/')
-		data = pd.read_csv(data_path, index_col="MessageId")
+		data = pd.read_csv(data_path, index_col="TransactionId")
 		return TestPNSClient(
 			cid, data, client_dir, session_key_length=session_key_length, error_rate=0.1, evaluation=True
 		)
