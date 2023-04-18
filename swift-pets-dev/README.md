@@ -79,7 +79,7 @@ Details see the following link:
 
 ### Demo Datasets
 
-Due to the confidentiality and privacy constraints, the dataset for the competetion is not released publically. Therefore, to help you run the program, we have crafted a fake synthetic demo dataset, which is provided under **`new_data/`** folder of `/federated_solutution` and `/centralized_solution`. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of which contains the data owned by the client. That is, each bank client will have data of its own accounts, and payment network system (PNS) will have access to the transaction data.
+Due to the confidentiality and privacy constraints, the dataset for the competetion is not released publically. Therefore, to help you run the program, we have crafted a fake synthetic demo dataset, which is provided under **`new_data/`** folder of `/federated_solution` and `/centralized_solution`. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of which contains the data owned by the client. That is, each bank client will have data of its own accounts, and payment network system (PNS) will have access to the transaction data.
 
 #### Account Dataset owned by Bank Clients
 
