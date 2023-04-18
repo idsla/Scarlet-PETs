@@ -50,7 +50,7 @@ Our solution for federated learning is built upon the [Flower framework]([Flower
 
 ## Our Solution: Step-by-Step Illustration of the Computational Process
 
-###  Whole Run Flow
+###  Setup Phase
 
 In both training and test phase, the program will first setup all private and public keys, random number owned by each client for generating keys for encryption and decrytion. Then the program will start simulate the collaboration process by using the built-in function from Flower framework `fl.simulate()`, it will use different processes to represent each client and server and simulate the whole process of federated learning. 
 
