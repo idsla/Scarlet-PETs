@@ -90,7 +90,7 @@ The general format of dataset for bank clients is as follows:
 - **Account information:** `Bank`, `Account`, `Name`, `Street`, `CountryCityZip`
 - **Flags**: categorical or ordinal value indicating whether risk of account, for example, 0 means no risk, 1 means low risk
 
-**Example of a synthetic fake dataset used in demo is as follows:**
+Example of a synthetic fake dataset used in demo is as follows:
 
 | Bank     | Account        | Name        | Street      | CountryCityZip       | Flags |
 | -------- | -------------- | ----------- | ----------- | -------------------- | ----- |
@@ -109,7 +109,7 @@ The general format of dataset for payment system organization client is as follo
 - **Transaction Currency and Amount:** `SettlementAmount`, `InstructedAmount`, `SettlementCurrency`, `InstructedCurrency`
 - **Label:** whether transaction is anomalous or not
 
-**Example of a synthetic fake dataset used in demo is as follows:**
+Example of a synthetic fake dataset used in demo is as follows:
 
 | MessageId                            | Timestamp       | UETR                                 | Sender   | Receiver | TransactionReference | OrderingAccount | OrderingName | OrderingStreet | OrderingCountryCityZip | BeneficiaryAccount | BeneficiaryName | BeneficiaryStreet | BeneficiaryCountryCityZip | SettlementDate | SettlementCurrency | SettlementAmount | InstructedCurrency | InstructedAmount | Label |
 | ------------------------------------ | --------------- | ------------------------------------ | -------- | -------- | -------------------- | --------------- | ------------ | -------------- | ---------------------- | ------------------ | --------------- | ----------------- | ------------------------- | -------------- | ------------------ | ---------------- | ------------------ | ---------------- | ----- |
