@@ -15,6 +15,17 @@ import hashlib  # TODO:import hash function as crypt_hash
 
 
 def join_flags_to_pns_data(pns_df, bank_df):
+	"""
+	joint the flags to the pns data
+	Parameters
+	----------
+	pns_df : pd.DataFrame
+	bank_df : pd.DataFrame
+
+	Returns
+	-------
+	pns_df : pd.DataFrame
+	"""
 	acc_flag = pd.Series(bank_df.Flags.values, index=bank_df.Account).to_dict()
 	pns_df['order_flag'] = pns_df['OrderingAccount'].map(acc_flag)
 	pns_df['bene_flag'] = pns_df['BeneficiaryAccount'].map(acc_flag)
@@ -23,6 +34,17 @@ def join_flags_to_pns_data(pns_df, bank_df):
 
 
 def rule_mining(data, threshold):
+	"""
+	Rule mining based on the flags
+	Parameters
+	----------
+	data: pd.DataFrame
+	threshold: float
+
+	Returns
+	-------
+	all_rules: dict
+	"""
 	df = data.copy()
 	df['BOFlags'] = df['bene_flag'].astype(str) + df['order_flag'].astype(str)
 	df.groupby('BOFlags')['Label'].apply(lambda x: x.value_counts(normalize=True))

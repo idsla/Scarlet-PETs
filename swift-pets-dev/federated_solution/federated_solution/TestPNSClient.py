@@ -49,10 +49,6 @@ class TestPNSClient(fl.client.Client):
 		data of the client
 	client_dir: Path
 		client directory
-	preds_format_path: Path
-		path to the prediction format file
-	preds_dest_path: Path
-		path to the destination of the prediction file
 	session_key_length: int
 		session key length
 	error_rate: float
@@ -67,10 +63,6 @@ class TestPNSClient(fl.client.Client):
 		client id
 	client_dir: Path
 		client directory
-	preds_format_path: Path
-		path to the prediction format file
-	preds_dest_path: Path
-		path to the destination of the prediction file
 	cid_bytes: bytes
 		client id in bytes
 	data: pd.DataFrame
@@ -122,8 +114,6 @@ class TestPNSClient(fl.client.Client):
 			cid: str,
 			data: pd.DataFrame,
 			client_dir: Path,
-			preds_format_path: Path,
-			preds_dest_path: Path,
 			session_key_length: int = 16,
 			error_rate: float = 0.001,
 			public_key_size: int = 2048,
@@ -132,8 +122,6 @@ class TestPNSClient(fl.client.Client):
 		super().__init__()
 		self.cid: str = cid
 		self.client_dir: Path = client_dir
-		self.preds_format_path: Path = preds_format_path
-		self.preds_dest_path: Path = preds_dest_path
 		self.cid_bytes: bytes = str_to_bytes(self.cid)
 		self.data: pd.DataFrame = data
 		self.error_rate: float = error_rate
@@ -319,26 +307,11 @@ class TestPNSClient(fl.client.Client):
 				pns_model = PNSModel.load(Path.joinpath(self.client_dir, "pns_model.joblib"))
 				pns_preds = pns_model.predict(pns_df.drop(['Label'], axis=1))
 
-				preds_format_df = pd.read_csv(self.preds_format_path, index_col="MessageId")
-				preds_format_df["Score"] = preds_format_df.index.map(pns_preds)
-
 				print(
 					"AUPRC:",
-					metrics.average_precision_score(y_true=pns_df['Label'], y_score=preds_format_df["Score"])
+					metrics.average_precision_score(y_true=pns_df['Label'], y_score=pns_preds)
 					)
 
-				logger.info("Writing out test predictions...")
-				preds_format_df.to_csv(self.preds_dest_path)
-				logger.info("Done.")
-			else:
-				pns_model = PNSModel.load(Path.joinpath(self.client_dir, "pns_model.joblib"))
-				pns_preds = pns_model.predict(pns_df)
-
-				preds_format_df = pd.read_csv(self.preds_format_path, index_col="MessageId")
-				preds_format_df["Score"] = preds_format_df.index.map(pns_preds)
-
-				logger.info("Writing out test predictions...")
-				preds_format_df.to_csv(self.preds_dest_path)
 				logger.info("Done.")
 
 			return EvaluateRes(

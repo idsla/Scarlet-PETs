@@ -21,7 +21,7 @@ def client_fn_train(cid: str) -> fl.client.Client:
 	session_key_length = 16
 	# Load model
 	if cid == 'pns':
-		data_path = './federated_solution/data/scenario01/train/pns/dev_pns_transaction_train_dataset.csv'
+		data_path = './federated_solution/new_data/scenario01/train/pns/pns_transaction_train.csv'
 		client_dir = Path('./federated_solution/state/pns/')
 		data = pd.read_csv(data_path, index_col="MessageId")
 		return TrainPNSClient(
@@ -29,7 +29,7 @@ def client_fn_train(cid: str) -> fl.client.Client:
 		)
 	else:
 		# generate public and private key
-		data_path = './federated_solution/data/scenario01/train/{}/bank_dataset.csv'.format(cid)
+		data_path = './federated_solution/new_data/scenario01/train/{}/bank_dataset.csv'.format(cid)
 		client_dir = Path('./federated_solution/state/{}/'.format(cid))
 		data = pd.read_csv(data_path)
 		accounts_list = convert_bank_valid_accounts_list(data)
@@ -44,18 +44,15 @@ def client_fn_test(cid: str) -> fl.client.Client:
 	session_key_length = 16
 	# Load model
 	if cid == 'pns':
-		data_path = './federated_solution/data/scenario01/test/pns/dev_pns_transaction_test_dataset.csv'
+		data_path = './federated_solution/new_data/scenario01/test/pns/pns_transaction_test.csv'
 		client_dir = Path('./federated_solution/state/pns/')
-		preds_dest_path = Path('./federated_solution/data/scenario01/test/pns/')
-		preds_format_path = Path('./federated_solution/data/scenario01/test/pns/predictions_format.csv')
 		data = pd.read_csv(data_path, index_col="MessageId")
 		return TestPNSClient(
-			cid, data, client_dir, session_key_length=session_key_length, error_rate=0.1,
-			preds_dest_path=preds_dest_path, preds_format_path=preds_format_path, evaluation=True
+			cid, data, client_dir, session_key_length=session_key_length, error_rate=0.1, evaluation=True
 		)
 	else:
 		# generate public and private key
-		data_path = './federated_solution/data/scenario01/test/{}/bank_dataset.csv'.format(cid)
+		data_path = './federated_solution/new_data/scenario01/test/{}/bank_dataset.csv'.format(cid)
 		client_dir = Path('./federated_solution/state/{}/'.format(cid))
 		data = pd.read_csv(data_path)
 		accounts_list = convert_bank_valid_accounts_list(data)

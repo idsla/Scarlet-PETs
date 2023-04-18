@@ -68,17 +68,14 @@ def rule_mining(data, threshold):
 
 
 def laplace_mech(v, sensitivity, epsilon):
-	"""DP Laplace Mechanism"""
 	return np.round(v + np.random.laplace(loc=0, scale=sensitivity / epsilon))
 
 
 def ls_at_distance(df, u, k):
-	"""Local sensitivity at distance k"""
-	return np.abs(u / (len(df) - k + 1))
+	return np.abs(u / ((len(df) - k + 1) + 1e4))
 
 
 def smooth_sens(df, k, epsilon):
-	"""Smooth sensitivity"""
 	delta = 1 / len(df) ** 2
 	u = df.max()
 
@@ -90,7 +87,6 @@ def smooth_sens(df, k, epsilon):
 def generate_feature(
 		df, pivot_name, new_feature_name, func, count_columns, mean_columns, agg_col=None, epsilon=0.25, dp_flag=False
 ):
-	"""Generate new features based on the pivot_name"""
 	if func == 'value_count':
 		d = df[pivot_name].value_counts()
 		d.name = new_feature_name
@@ -100,9 +96,8 @@ def generate_feature(
 				d_dp = d.copy()
 				for i in range(len(d_dp)):  # for each transaction, add laplace noise based on 1/eps
 					d_dp.iloc[i] = laplace_mech(d_dp.iloc[i], 1, epsilon)
-				df = df.drop(new_feature_name, axis=1).merge(
-					d_dp, left_on=pivot_name, right_index=True
-				)  # replace with the dp version
+				df = df.drop(new_feature_name, axis=1).merge(d_dp, left_on=pivot_name, right_index=True)  # replace
+			# with the dp version
 			else:
 				pass
 
@@ -138,7 +133,7 @@ def generate_feature(
 			}
 		)
 		df = df.merge(d, left_on=pivot_name, right_index=True)
-		# test = df.merge(d, left_on=pivot_name, right_index=True)
+	# test = df.merge(d, left_on=pivot_name, right_index=True)
 	else:
 		raise ValueError("func is not a valid option.")
 
@@ -149,14 +144,20 @@ def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
 	"""
 	from pns train and test data, extract more features
 	"""
-	df['Timestamp'] = pd.to_datetime(df['Timestamp'])
-	x = pd.to_datetime(df['SettlementDate'], format="%y%m%d").dt.strftime("%m%d")
-	x1 = pd.to_datetime(x, format="%m%d")
-	x = df['Timestamp'].dt.strftime("%m%d")
-	x2 = pd.to_datetime(x, format="%m%d")
-	df['datediff'] = ((x2 - x1).dt.days > 1).astype(int)
+	df["Timestamp"] = df["Timestamp"].astype("datetime64[ns]")
 	df["hour"] = df["Timestamp"].dt.hour.astype(str)
 	df['day'] = df["Timestamp"].dt.dayofweek.astype(str)
+
+	invalid_pair = {
+		'BAMEUR', 'BAMGBP', 'BDTUSD', 'BOBUSD', 'BRLUSD', 'BWPCZK', 'BWPEUR', 'BWPJPY', 'EGPEUR', 'EGPGBP',
+		'EGPUSD', 'FJDUSD', 'HRKAUD', 'HRKCAD', 'HRKUSD', 'JODAUD', 'JODCHF', 'JODDKK', 'JODEUR', 'JODGBP',
+		'JODUSD', 'KESCZK', 'KESEUR', 'KESUSD', 'KRWUSD', 'LKRCAD', 'LKREUR', 'LKRSGD', 'LKRUSD', 'NADEUR',
+		'NADNZD', 'NPRUSD', 'RSDEUR', 'RSDUSD', 'TZSEUR', 'TZSGBP', 'XOFCAD', 'XOFCHF', 'XOFEUR', 'XOFGBP', 'XOFUSD'
+	}
+
+	df['F2'] = df.apply(
+		lambda row: 1 if (row['InstructedCurrency'] + row['SettlementCurrency']) in invalid_pair else 0, axis=1
+	)
 
 	features_needed = [
 		{
@@ -190,11 +191,7 @@ def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
 		{
 			"feature_name": "recevier_in_degree",
 			"pivot_features": "Receiver", "function": "n_unique", "agg_col": "Sender"
-		},
-		# {"feature_name": "sender_wom_out_degree",
-		# "pivot_features": "Sender,wom", "function": "n_unique", "agg_col": "Receiver,wom"},
-		# {"feature_name": "receiver_wom_in_degree",
-		# "pivot_features": "Receiver,wom", "function": "n_unique", "agg_col": "Sender,wom"},
+		}
 	]
 
 	count_columns = ['sender_hour_freq', 'receiver_hour_freq']
@@ -239,7 +236,6 @@ def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
 
 		# feature name and filename
 		new_feature_name = row['feature_name']
-		# new_feature_name = '{}_{}'.format(pivot_name, function_name[0:4])
 		filename = hashlib.sha256(new_feature_name.encode()).hexdigest()
 		function_name = row['function']
 
@@ -299,7 +295,6 @@ def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
 
 	df['hour'] = df['hour'].astype('int')
 	df['day'] = df['day'].astype('int')
-	# df['wom'] = df['wom'].astype('int')
 
 	logger.info('Total features: {}'.format(df.shape[1] - 1))
 
@@ -426,6 +421,7 @@ class PNSModel:
 		return best
 
 	def fit(self, X, y, cv_flag=None):
+		X = X.replace([np.inf, -np.inf], np.nan).fillna(0)
 		"""fit model"""
 		if cv_flag:
 			params = self.cv(X, y)

@@ -128,7 +128,6 @@ class TrainStrategy(fl.server.strategy.Strategy):
             return ret
         # second round -> tells banks to share their banks partition
         elif server_round == 2:
-            print(self.public_keys_dict)
             config = {'task': 'share_bank_in_partition', 'key': self.public_keys_dict['pns']}
             ret = []
             for cid in clients.keys():
