@@ -110,7 +110,4 @@ Payment system owns the transaction data, and the anormal transaction detection 
 
 ### Federated Learning Solution
 
-[Federated Solution Documentation](./federated_solution/READ.md)
-
-
-
+[Federated Solution Documentation](./federated_solution/README.md)
