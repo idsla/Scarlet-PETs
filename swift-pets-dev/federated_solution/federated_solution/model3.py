@@ -145,19 +145,13 @@ def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
 	from pns train and test data, extract more features
 	"""
 	df["Timestamp"] = df["Timestamp"].astype("datetime64[ns]")
+	x = pd.to_datetime(df['SettlementDate'], format="%y%m%d").dt.strftime("%m%d")
+	x1 = pd.to_datetime(x, format="%m%d")
+	x = df['Timestamp'].dt.strftime("%m%d")
+	x2 = pd.to_datetime(x, format="%m%d")
+	df['datediff'] = ((x2 - x1).dt.days > 1).astype(int)
 	df["hour"] = df["Timestamp"].dt.hour.astype(str)
 	df['day'] = df["Timestamp"].dt.dayofweek.astype(str)
-
-	invalid_pair = {
-		'BAMEUR', 'BAMGBP', 'BDTUSD', 'BOBUSD', 'BRLUSD', 'BWPCZK', 'BWPEUR', 'BWPJPY', 'EGPEUR', 'EGPGBP',
-		'EGPUSD', 'FJDUSD', 'HRKAUD', 'HRKCAD', 'HRKUSD', 'JODAUD', 'JODCHF', 'JODDKK', 'JODEUR', 'JODGBP',
-		'JODUSD', 'KESCZK', 'KESEUR', 'KESUSD', 'KRWUSD', 'LKRCAD', 'LKREUR', 'LKRSGD', 'LKRUSD', 'NADEUR',
-		'NADNZD', 'NPRUSD', 'RSDEUR', 'RSDUSD', 'TZSEUR', 'TZSGBP', 'XOFCAD', 'XOFCHF', 'XOFEUR', 'XOFGBP', 'XOFUSD'
-	}
-
-	df['F2'] = df.apply(
-		lambda row: 1 if (row['InstructedCurrency'] + row['SettlementCurrency']) in invalid_pair else 0, axis=1
-	)
 
 	features_needed = [
 		{

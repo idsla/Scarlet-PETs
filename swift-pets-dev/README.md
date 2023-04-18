@@ -8,19 +8,39 @@
 
 ## Installation Instruction
 
-- Install python 3.8
+- Install python > 3.8
 
-- Installing packages by building conda environment from `environment.yml` file
+- Set up and activate virtualenv
+
   ```shell
-  conda env create -f environment.yml
-  conda activate ftad_pets
+  python -m venv ./venv
+  
+  # window gitbash
+  source ./venv/Scripts/activate
+  
+  # linux/unix
+  source ./venv/bin/activate
   ```
+
+- Install Flower framework
+
+  ```shell
+  pip install -U flwr["simulation"]
+  ```
+
+- Install all other packages
+
+  ```shell
+  pip install -r requirements.txt
+  ```
+
 - Packages Used
 
-	- mmh3 - to compute hash value
-	- pycryptodome - to encrypt and decrypt data
-	- xgboost - train model
-	- flower - federated learning framework
+  - mmh3 - to compute hash value
+  - pycryptodome - to encrypt and decrypt data
+  - xgboost - train model
+  - flower - federated learning framework
+  - others: joblib, loguru, hyperopt, scikit-learn
 
 ## Run program
 
@@ -61,7 +81,7 @@ Details see the following link:
 
 ### Demo Datasets
 
-Because the competition organization will not release the data used in competition to public. We provide a simple self generated fake synthetic demo datasets to under `/data` folder of `federated_solutution` and `centralized_solution` so that one can run our program. In federated solution, `data/` folder contains subfolders whose names are denoted by name of clients, each of them contains the the data owned by client, for example, a bank client will has its own accounts dataset and payment system organization client will have it own transaction data.
+Because the competition organization will not release the data used in competition to public. We provide a simple self generated fake synthetic demo dataset under **`new_data/`** folder of `/federated_solutution` and `/centralized_solution` so that one can run our program. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of them contains the the data owned by client, for example, a bank client will has its own accounts dataset and payment system organization client will have it own transaction data.
 
 #### Account Dataset owned by Bank Clients
 
@@ -85,8 +105,8 @@ The general format of dataset for payment system organization client is as follo
 - **Transaction IDs:** `MessageId`, `UETR`, `TransactionReference`
 
 - **Transaction Time:** `Timestamp`, `SettlementDate`
-- **Transaction Accounts:** `Sender`, `Receiver`, `OrderingAccount`, 'BeneficaryAccount', ...
-- **Transaction Currency and Amount:** `SettlementAmount`, 'InstructedAmount', `SettlementCurrency`, `InstructedCurrency`
+- **Transaction Accounts:** `Sender`, `Receiver`, `OrderingAccount`, `BeneficaryAccount`, ...
+- **Transaction Currency and Amount:** `SettlementAmount`, `InstructedAmount`, `SettlementCurrency`, `InstructedCurrency`
 - **Label:** whether transaction is anomalous or not
 
 **Example of a synthetic fake dataset used in demo is as follows:**

@@ -9,7 +9,7 @@ We propose a novel privacy-preserving federated learning approach to identify an
 
 ![pets](../image/pets.png)
 
-## Run Demo Program
+## Run Program
 
 ```shell
 python federated_solution.py
