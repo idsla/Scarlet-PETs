@@ -1,4 +1,4 @@
-# Private Preserving Federated Learning for Financial Transaction Anomaly Detection
+# Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning for Financial Crime Prevention
 
 ## Link to the Competition
 - https://www.drivendata.org/competitions/group/nist-federated-learning/
