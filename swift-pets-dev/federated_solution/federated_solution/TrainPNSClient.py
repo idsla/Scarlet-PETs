@@ -23,7 +23,7 @@ from flwr.common.parameter import ndarrays_to_parameters, parameters_to_ndarrays
 import numpy as np
 from Crypto.PublicKey import RSA
 import json
-import tracemalloc
+from config import parameters
 
 from .utils_basic import (
 	str_to_bytes, decrypt_data_and_session_key, search_data_enc, OR_arrays, decryption_bf,
@@ -302,7 +302,7 @@ class TrainPNSClient(fl.client.Client):
 			logger.info("Adding BF and extracting features")
 			pns_df = add_BF_feature2(pns_df, bloom, hashed_accounts_dict1, hashed_accounts_dict2)
 			logger.info("Adding BF and extracting features")
-			pns_df = extract_feature(pns_df, self.client_dir, phase='train', epsilon=0.25, dp_flag=True)
+			pns_df = extract_feature(pns_df, self.client_dir, phase='train', epsilon=parameters['DP_epsilon'], dp_flag=True)
 			pns_model = PNSModel()
 			logger.info("Fitting pns model...")
 			pns_model.fit(X=pns_df.drop(['Label'], axis=1), y=pns_df["Label"])

@@ -36,6 +36,8 @@ from .utils_advanced import (
 	update_hashed_accounts_dict,
 )
 
+from config import parameters
+
 
 class TestPNSClient(fl.client.Client):
 	"""
@@ -300,7 +302,7 @@ class TestPNSClient(fl.client.Client):
 			pns_df = self.data
 			logger.info("Adding BF and extracting features")
 			pns_df = add_BF_feature2(pns_df, bloom, hashed_accounts_dict1, hashed_accounts_dict2)
-			pns_df = extract_feature(pns_df, self.client_dir, phase='test', epsilon=0.25, dp_flag=False)
+			pns_df = extract_feature(pns_df, self.client_dir, phase='test', epsilon=parameters['DP_epsilon'], dp_flag=False)
 
 			logger.info("Loading pns model...")
 			if self.evaluation:

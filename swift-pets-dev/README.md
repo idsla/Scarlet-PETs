@@ -74,12 +74,12 @@ Details see the following link:
 
 ## Dataset Requirement and Description
 
-Details see the following link:
+For details see the following link:
 - https://www.drivendata.org/competitions/98/nist-federated-learning-1/page/524/
 
 ### Demo Datasets
 
-Due to the confidentiality and privacy constraints, the dataset for the competetion is not released publically. Therefore, to help you run the program, we have crafted a fake synthetic demo dataset, which is provided under **`new_data/`** folder of `/federated_solution` and `/centralized_solution`. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of which contains the data owned by the client. That is, each bank client will have data of its own accounts, and payment network system (PNS) will have access to the transaction data.
+Due to the confidentiality and privacy constraints, the dataset for the competition is not released publically. Therefore, to help you run the program, we have crafted a fake synthetic demo dataset, which is provided under **`new_data/`** folder of `/federated_solution` and `/centralized_solution`. In federated solution, **`new_data/`** folder contains subfolders whose names are denoted by name of clients, each of which contains the data owned by the client. That is, each bank client will have data from its own accounts, and payment network system (PNS) will have access to the transaction data.
 
 #### Account Dataset owned by Bank Clients
 
@@ -117,7 +117,7 @@ Example of a synthetic fake demo dataset is as follows:
 
 #### Training and Testing Data of Payment System Organization
 
-PNS client owns the transaction data, and the anomaly transaction detection will be carried out at its side; note that transaction data also contains the **label** which denotes whether a transaction is anomaly or not. The transaction data will be split into training and test data to learn and evalute the anomaly detection model. `Transaction_train.csv` and `Transaction_test.csv` respectively contain training and test data.
+PNS client owns the transaction data, and the anomaly transaction detection will be carried out at its side; note that transaction data also contains the **label** which denotes whether a transaction is an anomaly or not. The transaction data will be split into training and test data to learn and evaluate the anomaly detection model. `Transaction_train.csv` and `Transaction_test.csv` respectively contain training and test data.
 
 ## Solution
 

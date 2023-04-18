@@ -12,7 +12,7 @@ from hyperopt import fmin, tpe, hp, anneal, Trials
 import numpy as np
 from pathlib import Path
 import hashlib  # TODO:import hash function as crypt_hash
-
+from config import parameters
 
 def join_flags_to_pns_data(pns_df, bank_df):
 	"""
@@ -145,7 +145,7 @@ def generate_feature(
 	return df, d
 
 
-def extract_feature(df, model_dir, phase, epsilon=0.25, dp_flag=False):
+def extract_feature(df, model_dir, phase, epsilon=parameters['DP_epsilon'], dp_flag=False):
 	"""
 	from pns train and test data, extract more features
 	"""
@@ -310,7 +310,7 @@ def compute_flag(row, bloom):
 def add_BF_feature2(pns_df, bank):
 	logger.info("Extracting bloom filter features")
 	from .bloom_filter import BloomFilter
-	bloom = BloomFilter(max_elements=bank.shape[0], error_rate=0.001)
+	bloom = BloomFilter(max_elements=bank.shape[0], error_rate=parameters['bf_error_rate'])
 	bank['Account'] = bank['Account'].astype(str)
 	bank_nonflags = bank[bank['Flags'] == 0]
 	ret = bank_nonflags['Account'].astype(str) + bank_nonflags['Name'].astype(str) + bank_nonflags['Street'].astype(

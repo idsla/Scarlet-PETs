@@ -14,18 +14,19 @@ from federated_solution.TrainPNSClient import TrainPNSClient
 from federated_solution.TestPNSClient import TestPNSClient
 from federated_solution.utils_basic import convert_bank_valid_accounts_list
 from federated_solution.utils_advanced import get_unique_banks
+from config import parameters
 
 
 def client_fn_train(cid: str) -> fl.client.Client:
 	"""Create a Flower client representing a single organization."""
-	session_key_length = 16
+	session_key_length = parameters['session_key_size']
 	# Load model
 	if cid == 'pns':
 		data_path = './federated_solution/new_data/scenario01/train/pns/pns_transaction_train.csv'
 		client_dir = Path('./federated_solution/state/pns/')
 		data = pd.read_csv(data_path, index_col="TransactionId")
 		return TrainPNSClient(
-			cid, client_dir, data, session_key_length, error_rate=0.1
+			cid, client_dir, data, session_key_length, error_rate=parameters['bf_error_rate']
 		)
 	else:
 		# generate public and private key
@@ -35,20 +36,20 @@ def client_fn_train(cid: str) -> fl.client.Client:
 		accounts_list = convert_bank_valid_accounts_list(data)
 		banks = get_unique_banks(data)
 		return BankClient(
-			cid, accounts_list, data.shape[0], banks, client_dir, session_key_length, error_rate=0.1
+			cid, accounts_list, data.shape[0], banks, client_dir, session_key_length, error_rate=parameters['bf_error_rate']
 		)
 
 
 def client_fn_test(cid: str) -> fl.client.Client:
 	"""Create a Flower client representing a single organization."""
-	session_key_length = 16
+	session_key_length = parameters['session_key_size']
 	# Load model
 	if cid == 'pns':
 		data_path = './federated_solution/new_data/scenario01/test/pns/pns_transaction_test.csv'
 		client_dir = Path('./federated_solution/state/pns/')
 		data = pd.read_csv(data_path, index_col="TransactionId")
 		return TestPNSClient(
-			cid, data, client_dir, session_key_length=session_key_length, error_rate=0.1, evaluation=True
+			cid, data, client_dir, session_key_length=session_key_length, error_rate=parameters['bf_error_rate'], evaluation=True
 		)
 	else:
 		# generate public and private key
@@ -58,7 +59,8 @@ def client_fn_test(cid: str) -> fl.client.Client:
 		accounts_list = convert_bank_valid_accounts_list(data)
 		banks = get_unique_banks(data)
 		return BankClient(
-			cid, accounts_list, data.shape[0], banks, client_dir, session_key_length, error_rate=0.1
+			cid, accounts_list, data.shape[0], banks, client_dir, session_key_length,
+			error_rate=parameters['bf_error_rate']
 		)
 
 
@@ -78,7 +80,7 @@ def train_setup(server_dir: Path, client_dirs_dict: Dict[str, Path]):
 			dictionary is keyed by the client ID.
 	"""
 	num_rounds = len(client_dirs_dict.keys()) + 7
-	public_key_size = 2048
+	public_key_size = parameters['public_key_size']
 	with open(server_dir / 'train_server_config.json', 'w') as f:
 		json.dump({'num_rounds': num_rounds}, f)
 
@@ -108,9 +110,9 @@ def train_setup(server_dir: Path, client_dirs_dict: Dict[str, Path]):
 		file_path = Path.joinpath(client_dir, 'client_config.pkl')
 		if file_path.exists():
 			file_path.unlink()
-		prime = 20358416231591
+		prime = parameters['prime']
 		random_key = random.randint(0, prime - 1)
-		key2 = get_random_bytes(32)  # TODO:parameters
+		key2 = get_random_bytes(parameters['xor_key_size'])  # TODO:parameters
 		client_config = {'random_key': random_key, 'key2': key2}
 		with file_path.open(mode='wb') as f:
 			pickle.dump(client_config, f)
@@ -135,7 +137,8 @@ def test_setup(server_dir: Path, client_dirs_dict: Dict[str, Path]):
 		if public_key_file.exists():
 			public_key_file.unlink()
 
-		key = RSA.generate(2048)
+		public_key_size = parameters['public_key_size']
+		key = RSA.generate(public_key_size)
 		private_key = key.export_key()
 		file_out = Path.joinpath(client_dir, "private.pem").open(mode='wb')
 		file_out.write(private_key)
@@ -149,9 +152,9 @@ def test_setup(server_dir: Path, client_dirs_dict: Dict[str, Path]):
 		file_path = Path.joinpath(client_dir, 'client_config.pkl')
 		if file_path.exists():
 			file_path.unlink()
-		prime = 20358416231591
+		prime = parameters['prime']
 		random_key = random.randint(0, prime - 1)
-		key2 = get_random_bytes(32)  # TODO:parameters
+		key2 = get_random_bytes(parameters['xor_key_size'])  # TODO:parameters
 		client_config = {'random_key': random_key, 'key2': key2}
 		with file_path.open(mode='wb') as f:
 			pickle.dump(client_config, f)

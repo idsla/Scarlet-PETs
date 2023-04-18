@@ -13,6 +13,7 @@ cloudpickle==2.2.1
 colorama==0.4.6
 colorful==0.5.5
 distlib==0.3.6
+dynaconf==3.1.12
 filelock==3.11.0
 frozenlist==1.3.3
 future==0.18.3
@@ -37,6 +38,7 @@ numpy==1.24.2
 nvidia-ml-py==11.525.112
 opencensus==0.11.2
 opencensus-context==0.1.3
+packaging==23.1
 pandas==2.0.0
 pkgutil_resolve_name==1.3.10
 platformdirs==3.2.0

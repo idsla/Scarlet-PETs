@@ -1,0 +1,8 @@
+{
+  "public_key_size": 2048,
+  "bf_error_rate": 0.1,
+  "prime": 20358416231591,
+  "xor_key_size": 32,
+  "session_key_size": 16,
+  "DP_epsilon": 0.25
+}
