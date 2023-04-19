@@ -15,7 +15,7 @@ We propose a novel privacy-preserving federated learning approach to identify an
 python federated_solution.py
 ```
 
-## Privacy and Security Parameters
+## Privacy & Security Parameters Configuration 
 JSON file `parameters.json` contains several **security and privacy parameters** that are essential for ensuring the strength and robustness of the privacy and security of our solution. These parameters have been carefully selected and tuned to provide strong encryption, secure communication, and reliable privacy protection for sensitive data. Below is a list of each parameter along with an explanation of its meaning:
 
 - **`public_key_size`**: Specifies the size of the RSA public key used for encrypting data. The larger the key size, the more difficult it is to crack the encryption, but larger key sizes can also increase computational overhead.
