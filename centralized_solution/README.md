@@ -4,7 +4,7 @@
 
 The centralized solution is based on [XGBoost Model]([XGBoost Documentation — xgboost 1.7.5 documentation](https://xgboost.readthedocs.io/en/stable/)). We join the account-level data with transaction-level data, and then compute features that will be used to build the gradient boosting tree model. To preserve privacy, we rely on Differential Privacy to add noise to sensitive features so that privacy can be preserved.
 
-## Run Program
+## Hoe to run the program:
 
 ```shell
 Python solution_centralized.py
