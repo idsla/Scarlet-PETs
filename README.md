@@ -25,6 +25,15 @@ Details see the following link:
 We developed a novel privacy-preserving (PP) two-step federated learning approach to identify anomalous financial transactions. In the first step, we performed PP feature mining for account-level banks’ data, followed by their augmentation to the payment network’s data using a PP encoding scheme. In the second step, a classifier is learned by the messaging network from the augmented data. A key benefit of our approach is that the performance in the federated setting is comparable to the performance in the centralized setting, and there is no significant drop in accuracy. Furthermore, our approach is extremely flexible since it allows the messaging network to adapt its model and features to build a better classifier without imposing any additional computational or privacy burden on the banks.
 ![pets](./image/pets.png)
 
+
+### Centralized Solution
+
+[Centralized Solution Documentation](./centralized_solution/README.md)
+
+### Federated Learning Solution
+
+[Federated Solution Documentation](./federated_solution/README.md)
+
 ## How to Install:
 
 - Install python > 3.8
@@ -127,12 +136,4 @@ Example of a synthetic fake demo dataset is as follows:
 
 PNS client owns the transaction data, and the anomaly transaction detection will be carried out at its side; note that transaction data also contains the **label** which denotes whether a transaction is an anomaly or not. The transaction data will be split into training and test data to learn and evaluate the anomaly detection model. `Transaction_train.csv` and `Transaction_test.csv` respectively contain training and test data.
 
-## Solution
 
-### Centralized Solution
-
-[Centralized Solution Documentation](./centralized_solution/README.md)
-
-### Federated Learning Solution
-
-[Federated Solution Documentation](./federated_solution/README.md)
