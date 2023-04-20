@@ -9,6 +9,20 @@ This repository provides software for Team Scarlet PETs' solution to the [U.S. P
 - https://www.drivendata.org/competitions/105/nist-federated-learning-2-financial-crime-federated/
 - https://www.drivendata.org/competitions/144/nist-federated-learning-2-financial-crime-centralized/
 
+
+## Problem Description: US-PETs Financial Crime Prize
+
+The United Nations estimates that up to $2 trillion of cross-border money laundering takes place each year, financing
+organized crime and undermining economic prosperity. Financial institutions such as banks and credit agencies, along
+with organizations that process transactions between institutions must protect personal and financial data, while also trying to report and deter illicit financial activities. In this context, we have designed and developed an innovative privacy-preserving federated learning solution that facilitates cross-institution and cross-border anomaly detection to combat financial crime. This use case features both vertical and horizontal data partitioning.
+![alt text](./image/problem.png)
+
+Details see the following link:
+- https://www.drivendata.org/competitions/98/nist-federated-learning-1/page/524/
+- https://www.drivendata.org/competitions/105/nist-federated-learning-2-financial-crime-federated/
+- https://www.drivendata.org/competitions/144/nist-federated-learning-2-financial-crime-centralized/
+
+
 ## Installation Instruction
 
 - Install python > 3.8
@@ -63,17 +77,6 @@ This repository provides software for Team Scarlet PETs' solution to the [U.S. P
   python solution_federated.py
   ```
 
-## Problem Description: US-PETs Financial Crime Prize
-
-The United Nations estimates that up to $2 trillion of cross-border money laundering takes place each year, financing
-organized crime and undermining economic prosperity. Financial institutions such as banks and credit agencies, along
-with organizations that process transactions between institutions must protect personal and financial data, while also trying to report and deter illicit financial activities. In this context, we have designed and developed an innovative privacy-preserving federated learning solution that facilitates cross-institution and cross-border anomaly detection to combat financial crime. This use case features both vertical and horizontal data partitioning.
-![alt text](./image/problem.png)
-
-Details see the following link:
-- https://www.drivendata.org/competitions/98/nist-federated-learning-1/page/524/
-- https://www.drivendata.org/competitions/105/nist-federated-learning-2-financial-crime-federated/
-- https://www.drivendata.org/competitions/144/nist-federated-learning-2-financial-crime-centralized/
 
 ## Dataset Requirement and Description
 
