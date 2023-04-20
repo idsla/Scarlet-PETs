@@ -25,7 +25,7 @@ Details see the following link:
 We developed a novel privacy-preserving (PP) two-step federated learning approach to identify anomalous financial transactions. In the first step, we performed PP feature mining for account-level banks’ data, followed by their augmentation to the payment network’s data using a PP encoding scheme. In the second step, a classifier is learned by the messaging network from the augmented data. A key benefit of our approach is that the performance in the federated setting is comparable to the performance in the centralized setting, and there is no significant drop in accuracy. Furthermore, our approach is extremely flexible since it allows the messaging network to adapt its model and features to build a better classifier without imposing any additional computational or privacy burden on the banks.
 ![pets](./image/pets.png)
 
-## Installation Instruction
+## How to Install:
 
 - Install python > 3.8
 
@@ -61,7 +61,7 @@ We developed a novel privacy-preserving (PP) two-step federated learning approac
   - flower - federated learning framework
   - others: joblib, loguru, hyperopt, scikit-learn
 
-## Run program
+## How to Run:
 
 - **Centralized Solution**
 
