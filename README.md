@@ -28,7 +28,7 @@ We developed a novel privacy-preserving (PP) two-step federated learning approac
 
 ### Centralized Solution
 
-[Centralized Solution Documentation](./centralized_solution/README.md)
+### [Centralized Solution Documentation](./centralized_solution/README.md)
 
 ### Federated Learning Solution
 
