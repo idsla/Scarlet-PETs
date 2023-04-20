@@ -52,3 +52,6 @@ JSON file `parameters.json` contains several **security and privacy parameters**
 ## Entry Point
 
 `solution_centralized.py` - main program to run
+
+©2023 Rutgers, The State University of New Jersey, All rights reserved. Do not copy or reproduce without permission. 
+
