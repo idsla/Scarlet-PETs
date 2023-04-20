@@ -26,13 +26,9 @@ We developed a novel privacy-preserving (PP) two-step federated learning approac
 ![pets](./image/pets.png)
 
 
-### Centralized Solution
-
 ### [Centralized Solution Documentation](./centralized_solution/README.md)
 
-### Federated Learning Solution
-
-[Federated Solution Documentation](./federated_solution/README.md)
+### [Federated Solution Documentation](./federated_solution/README.md)
 
 ## How to Install:
 
