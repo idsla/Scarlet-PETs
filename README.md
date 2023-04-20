@@ -1,5 +1,5 @@
 # Scarlet PETs
-This repository provides software for Team Scarlet PETs' solution to the [U.S. PETs Prize Challenge](https://petsprizechallenges.com) (Financial Crime Prevention). Scarlet PET's solution won the [first place](https://www.whitehouse.gov/ostp/news-updates/2023/03/31/us-uk-annouce-winners-innovation-pets-democratic-values/) in the Challenge.
+This repository provides software for Team Scarlet PETs' solution to the [U.S. PETs Prize Challenge](https://petsprizechallenges.com) for developing Privacy Enhancing Technologies (**PETs**) for Financial Crime Prevention. Scarlet PET's solution won the [first place](https://www.whitehouse.gov/ostp/news-updates/2023/03/31/us-uk-annouce-winners-innovation-pets-democratic-values/) in the Challenge.
 
 # Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning
 
