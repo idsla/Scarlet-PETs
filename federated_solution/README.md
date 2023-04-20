@@ -15,6 +15,17 @@ We propose a novel privacy-preserving federated learning approach to identify an
 python federated_solution.py
 ```
 
+## Privacy & Security Parameters Configuration 
+JSON file `parameters.json` contains several **security and privacy parameters**. The default values have been carefully selected to provide secure communication and reliable privacy protection for sensitive data. Below is a list of tuneable parameter:
+
+- **`public_key_size`**: Specifies the size of the RSA public key used for encrypting data.
+- **`session_key_size`**: Specifies the size of the (AES) session keys, used for secure communication.
+- **`xor_key_size`**: Specifies the size of the common (random) key that is securely computed by all bank clients (this key is used for the secure encoding of the sensitive data).
+- **`bf_error_rate`**: Specifies the acceptable false positive rate for the Bloom filter (the false positive rate affects the accuracy of the filter and must be carefully balanced against its computational cost).
+- **`prime`**: A large prime number used for various cryptographic operations (the security of operations relies on the size and properties of the prime number used).
+- **`DP_epsilon`**: Specifies the level of privacy protection provided by the differential privacy mechanism used to protect sensitive features.
+
+
 ## Solution Framework
 
 Our solution for federated learning (FL) is built upon the [Flower framework]([Flower 1.4.0](https://flower.dev/docs/)), which is well-known for its efficient and scalable approach for FL. We have utilized the `Client` and `Strategy` classes, inherited from Flower, and implemented the interface, ensuring seamless integration with the framework. For more information on the Flower framework and its capabilities, please refer to the provided links. The following link shows how clients and the server communicate in Flower framework - [Flower Architecture]([Implementing Strategies - Flower 1.4.0](https://flower.dev/docs/implementing-strategies.html)) 
@@ -114,12 +125,3 @@ The testing phase differs from the training phase in only the final round where:
 
 
 
-## Privacy and Security Parameters
-JSON file `parameters.json` contains several **security and privacy parameters** that are essential for ensuring the strength and robustness of the privacy and security of our solution. These parameters have been carefully selected and tuned to provide strong encryption, secure communication, and reliable privacy protection for sensitive data. Below is a list of each parameter along with an explanation of its meaning:
-
-- **`public_key_size`**: Specifies the size of the RSA public key used for encrypting data. The larger the key size, the more difficult it is to crack the encryption, but larger key sizes can also increase computational overhead.
-- **`session_key_size`**: Determines the size of the symmetric session keys used for secure communication. The length of the session key impacts the security of the communication channel.
-- **`xor_key_size`**: Specifies the size of a random key that is securely computed by all bank clients by using secure XOR. This key is used to encrypt hashed account information, providing an additional layer of security to prevent unauthorized access to sensitive data.
-- **`bf_error_rate`**: Represents the acceptable false positive rate for the Bloom filter. The false positive rate affects the accuracy of the filter and must be carefully balanced against its computational cost.
-- **`prime`**: The largest prime number used for various cryptographic operations. The security of these operations relies heavily on the size and properties of the prime number used.
-- **`DP_epsilon`**: Specifies the level of privacy protection provided by the differential privacy mechanism used to protect sensitive features.
