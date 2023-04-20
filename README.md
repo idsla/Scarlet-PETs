@@ -6,8 +6,9 @@ This repository provides software for Team Scarlet PETs' solution to the [U.S. P
 ## Link to the Competition
 - https://petsprizechallenges.com/
 - https://www.drivendata.org/competitions/group/nist-federated-learning/
-- https://www.drivendata.org/competitions/105/nist-federated-learning-2-financial-crime-federated/
 - https://www.drivendata.org/competitions/144/nist-federated-learning-2-financial-crime-centralized/
+- https://www.drivendata.org/competitions/105/nist-federated-learning-2-financial-crime-federated/
+
 
 
 ## Problem Description: US-PETs Financial Crime Prize
@@ -17,8 +18,6 @@ Financial institutions such as banks and credit agencies, and organizations that
 
 Details see the following link:
 - https://www.drivendata.org/competitions/98/nist-federated-learning-1/page/524/
-- https://www.drivendata.org/competitions/105/nist-federated-learning-2-financial-crime-federated/
-- https://www.drivendata.org/competitions/144/nist-federated-learning-2-financial-crime-centralized/
 
 
 ## Our Approach
