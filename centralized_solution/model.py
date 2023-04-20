@@ -21,32 +21,32 @@ def join_flags_to_pns_data(pns_df, bank_df):
     return pns_df
 
 
-def rule_mining(data, threshold):
-    df = data.copy()
-    df['BOFlags'] = df['bene_flag'].astype(str) + df['order_flag'].astype(str)
-    df.groupby('BOFlags')['Label'].apply(lambda x: x.value_counts(normalize=True))
+# def rule_mining(data, threshold):
+#     df = data.copy()
+#     df['BOFlags'] = df['bene_flag'].astype(str) + df['order_flag'].astype(str)
+#     df.groupby('BOFlags')['Label'].apply(lambda x: x.value_counts(normalize=True))
 
-    all_rules = df.groupby('BOFlags')['Label'].apply(lambda x: x.value_counts(normalize=True)).to_dict()
+#     all_rules = df.groupby('BOFlags')['Label'].apply(lambda x: x.value_counts(normalize=True)).to_dict()
 
-    for key in all_rules.copy().keys():
-        if key[1] == 0:  # remove the rules applied on normal transactions
-            all_rules.pop(key, None)
-        elif key[0].startswith('0.0') or key[0].endswith('0.0'):  # remove the rules by the one-side flag
-            all_rules.pop(key, None)
-        else:
-            if all_rules[key] < threshold:  # remove the rules w/o enough support
-                all_rules.pop(key, None)
-            else:
-                all_rules[key[0]] = all_rules.pop(key)
+#     for key in all_rules.copy().keys():
+#         if key[1] == 0:  # remove the rules applied on normal transactions
+#             all_rules.pop(key, None)
+#         elif key[0].startswith('0.0') or key[0].endswith('0.0'):  # remove the rules by the one-side flag
+#             all_rules.pop(key, None)
+#         else:
+#             if all_rules[key] < threshold:  # remove the rules w/o enough support
+#                 all_rules.pop(key, None)
+#             else:
+#                 all_rules[key[0]] = all_rules.pop(key)
 
-    # add new feature based on the rule dic
-    if all_rules.keys():
-        for i in range(len(list(all_rules.keys()))):
-            df['Rule_' + str(i)] = [0 for _ in range(len(df))]
-            ano_index = df[df['BOFlags'] == list(all_rules.keys())[i]].index
-            df['Rule_' + str(i)].mask(df.index.isin(ano_index), 1, inplace=True)
+#     # add new feature based on the rule dic
+#     if all_rules.keys():
+#         for i in range(len(list(all_rules.keys()))):
+#             df['Rule_' + str(i)] = [0 for _ in range(len(df))]
+#             ano_index = df[df['BOFlags'] == list(all_rules.keys())[i]].index
+#             df['Rule_' + str(i)].mask(df.index.isin(ano_index), 1, inplace=True)
 
-    return df, all_rules
+#     return df, all_rules
 
 
 def generate_feature(df, pivot_name, new_feature_name, func, agg_col=None):

@@ -9,8 +9,7 @@ from model2 import (
     add_BF_feature, add_BF_feature2,
     extract_feature,
     PNSModel,
-    join_flags_to_pns_data,
-    rule_mining
+    join_flags_to_pns_data
 )
 
 
