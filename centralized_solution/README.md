@@ -2,7 +2,7 @@
 
  ## Overview
 
-The centralized solution is based on [XGBoost Model]([XGBoost Documentation — xgboost 1.7.5 documentation](https://xgboost.readthedocs.io/en/stable/)). We join the account-level data with transaction-level data, and then compute features that will be used to build the gradient boosting tree model. To preserve privacy, we rely on Differential Privacy to add noise to sensitive features so that privacy can be preserved.
+The centralized solution is based on [XGBoost Model]([XGBoost Documentation — xgboost 1.7.5 documentation](https://xgboost.readthedocs.io/en/stable/)). We join the account-level data with transaction-level data, and then compute features that will be used to build the gradient boosting tree model. To preserve privacy, we rely on Differential Privacy to add noise to sensitive features so that privacy can be preserved. The detailed solution description can be found [here](https://rutgers.box.com/s/q84zjo3edv5d1e1eu67ypihiw8cb2djq).
 
 ## Hoe to run the program:
 
