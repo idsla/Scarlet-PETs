@@ -1,4 +1,4 @@
-# Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning for Financial Crime Prevention
+# Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning
 ## Overview
 
 We propose a novel privacy-preserving federated learning approach to identify anomalous financial transactions in Payment Network Systems (PNS), e.g., SWIFT. Our approach utilizes a two-step anomaly detection methodology to solve the problem. In the first step, we mine features based on account-level data and labels, and then use a privacy-preserving encoding scheme to augment these features to the data held by PNS. In the second step, PNS now learns a highly accurate classifier from the augmented data.
