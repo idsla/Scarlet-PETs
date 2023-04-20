@@ -4,8 +4,8 @@ This repository provides software for Team Scarlet PETs' solution to the [U.S. P
 # Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning
 
 ## Link to the Competition
-- https://www.drivendata.org/competitions/group/nist-federated-learning/
 - https://petsprizechallenges.com/
+- https://www.drivendata.org/competitions/group/nist-federated-learning/
 - https://www.drivendata.org/competitions/105/nist-federated-learning-2-financial-crime-federated/
 - https://www.drivendata.org/competitions/144/nist-federated-learning-2-financial-crime-centralized/
 
