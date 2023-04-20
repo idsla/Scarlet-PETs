@@ -132,6 +132,7 @@ Example of a synthetic fake demo dataset is as follows:
 PNS client owns the transaction data, and the anomaly transaction detection will be carried out at its side; note that transaction data also contains the **label** which denotes whether a transaction is an anomaly or not. The transaction data will be split into training and test data to learn and evaluate the anomaly detection model. `Transaction_train.csv` and `Transaction_test.csv` respectively contain training and test data.
 
 
-## For question, contact:
+
+## For questions, please contact:
 - [Hafiz Asif](mailto:hafiz.asif@rutgers.edu)
 - [Sitao Min](mailto:sm2370@rutgers.edu)
