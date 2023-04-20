@@ -1,4 +1,6 @@
-# Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning for Financial Crime Prevention
+# Scarlet PETs
+
+# Anomaly Detection via Privacy-Enhanced Two-Step Federated Learning
 
 ## Link to the Competition
 - https://www.drivendata.org/competitions/group/nist-federated-learning/
