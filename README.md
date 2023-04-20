@@ -136,3 +136,5 @@ PNS client owns the transaction data, and the anomaly transaction detection will
 ## For questions, please contact:
 ### [Hafiz Asif](mailto:hafiz.asif@rutgers.edu)
 ### [Sitao Min](mailto:sm2370@rutgers.edu)
+
+©2023 Rutgers, The State University of New Jersey, All rights reserved. Do not copy or reproduce without permission. 
