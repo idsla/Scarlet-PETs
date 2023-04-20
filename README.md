@@ -12,7 +12,7 @@ This repository provides software for Team Scarlet PETs' solution to the [U.S. P
 
 ## Problem Description: US-PETs Financial Crime Prize
 
-Financial institutions such as banks and credit agencies, and organizations that process transactions between institutions, must protect personal and financial federated data while also trying to report and deter illicit financial activities. In this context, the federated problem setting, considered in the challenge, is as follows: A Payment Network System (PNS) connects multiple financial institutions to make transactions. The PNS has the transactional data, while institutions (e.g., banks) have private and confidential information on the accounts (of their clients). The aim is to develop a privacy-enhancing federated learning (FL) solution to build an anomaly detection model over federated data. The FL-based solution will facilitate cross-institution and cross-border anomaly detection to combat financial crime. /*This use case features both vertical and horizontal data partitioning.![alt text](./image/problem.png)*/
+Financial institutions such as banks and credit agencies, and organizations that process transactions between institutions, must protect personal and financial federated data while also trying to report and deter illicit financial activities. In this context, the federated problem setting, considered in the challenge, is as follows: A Payment Network System (PNS) connects multiple financial institutions to make transactions. The PNS has the transactional data, while institutions (e.g., banks) have private and confidential information on the accounts (of their clients). The aim is to develop a privacy-enhancing federated learning (FL) solution to build an anomaly detection model over federated data. The FL-based solution will facilitate cross-institution and cross-border anomaly detection to combat financial crime.
 
 
 Details see the following link:
@@ -23,6 +23,7 @@ Details see the following link:
 
 ## Our Approach
 We developed a novel privacy-preserving (PP) two-step federated learning approach to identify anomalous financial transactions. In the first step, we performed PP feature mining for account-level banks’ data, followed by their augmentation to the payment network’s data using a PP encoding scheme. In the second step, a classifier is learned by the messaging network from the augmented data. A key benefit of our approach is that the performance in the federated setting is comparable to the performance in the centralized setting, and there is no significant drop in accuracy. Furthermore, our approach is extremely flexible since it allows the messaging network to adapt its model and features to build a better classifier without imposing any additional computational or privacy burden on the banks.
+
 
 ## Installation Instruction
 
